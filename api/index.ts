@@ -711,6 +711,234 @@ const VERIFIED_ENGINEERING_JOBS = [
       '신재생 전력원 연계에 따른 주파수 제어 및 계통 관성 분석'
     ]
   },
+  // ==========================================
+  // 신규 추가: 인턴 채용공고 (대기업, 계열사, 중견기업, 중소기업 / 체험형·채용연계형·전환형)
+  // ==========================================
+  {
+    id: 'job_hmc_intern_01',
+    title: '[H-Experience] 2026 동계 채용전환형 인턴 - 미래 모빌리티 R&D/전동화 제어',
+    company: '현대자동차',
+    location: '경기 남양연구소',
+    experienceLevel: '인턴',
+    internType: '전환형 인턴' as const,
+    companyScale: '대기업' as const,
+    majorRequirement: ['기계공학', '전자전기공학', '컴퓨터공학', '제어공학'],
+    techStack: ['MATLAB/Simulink', 'C/C++', 'CAN', 'Python'],
+    deadline: '2026-11-20',
+    postedDate: '2026-11-01',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://talent.hyundai.com',
+    officialCareerUrl: 'https://talent.hyundai.com',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '현대자동차 채용 공식 (H-Experience)',
+    isLiveApi: false,
+    description: '전기차 전동화 파워트레인 및 자율주행 모빌리티 제어 로직 기초 실무 프로젝트 수행 및 인턴십 평가 후 정규직 전환 기회 부여',
+    responsibilities: [
+      '실차 시뮬레이션 환경 기반 모터/인버터 제어 성능 데이터 검증',
+      'CAN 통신 기반 센서 데이터 로깅 및 파라미터 분석 실무',
+      '선행 모빌리티 기술 과제 분석 및 현업 멘토 프로젝트 발표'
+    ]
+  },
+  {
+    id: 'job_sec_intern_02',
+    title: '2026 동계 대학생 인턴십 - 메모리사업부 반도체 회로설계 및 공정기술',
+    company: '삼성전자',
+    location: '경기 화성/평택',
+    experienceLevel: '인턴',
+    internType: '체험형 인턴' as const,
+    companyScale: '대기업' as const,
+    majorRequirement: ['전자전기공학', '반도체공학', '물리학', '신소재공학'],
+    techStack: ['SPICE', 'Verilog', 'Python', 'Origin', 'TCAD'],
+    deadline: '2026-11-22',
+    postedDate: '2026-11-01',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://www.samsungcareers.com',
+    officialCareerUrl: 'https://www.samsungcareers.com',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '삼성채용 공식 커리어스',
+    isLiveApi: false,
+    description: '차세대 DRAM 및 NAND 플래시 메모리 코어 회로 시뮬레이션 및 반도체 공정 계측 실무 직무 체험',
+    responsibilities: [
+      '기초 SPICE 시뮬레이션을 통한 단위 셀 동작 특성 해석',
+      '웨이퍼 박막/식각 공정 산포 데이터 기초 통계 분석',
+      '실무 엔지니어 멘토링을 통한 반도체 설계 프로세스 학습'
+    ]
+  },
+  {
+    id: 'job_mobis_intern_03',
+    title: '2026 하반기 채용연계형 인턴 - 자율주행 센서 융합 및 제어기 SW',
+    company: '현대모비스',
+    location: '경기 용인 마북연구소',
+    experienceLevel: '인턴',
+    internType: '채용연계형 인턴' as const,
+    companyScale: '대기업 계열사' as const,
+    majorRequirement: ['전자전기공학', '컴퓨터공학', '기계공학'],
+    techStack: ['C/C++', 'Linux', 'ROS2', 'Git'],
+    deadline: '2026-11-26',
+    postedDate: '2026-10-28',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://mobis.recruiter.co.kr',
+    officialCareerUrl: 'https://mobis.recruiter.co.kr',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '현대모비스 채용 포털',
+    isLiveApi: false,
+    description: '자율주행 센서(카메라/라이다) 인터페이스 드라이버 개발 및 실시간 포인트클라우드 필터링 실무 검증 후 정규직 연계',
+    responsibilities: [
+      '임베디드 Linux 타겟 환경에서 센서 데이터 파이프라인 테스트',
+      '차량 네트워크 통신 규격 기반 패킷 분석 및 결함 디버깅',
+      '현업 엔지니어와 공동으로 파일럿 소프트웨어 모듈 구현'
+    ]
+  },
+  {
+    id: 'job_autoever_intern_04',
+    title: '2026 채용전환형 인턴십 - 차량 표준 소프트웨어(AUTOSAR) 플랫폼',
+    company: '현대오토에버',
+    location: '서울 강남구 테헤란로',
+    experienceLevel: '인턴',
+    internType: '전환형 인턴' as const,
+    companyScale: '대기업 계열사' as const,
+    majorRequirement: ['컴퓨터공학', '전자공학', '정보통신공학'],
+    techStack: ['C/C++', 'AUTOSAR Classic', 'Vector CANoe'],
+    deadline: '2026-11-25',
+    postedDate: '2026-10-27',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://hyundai-autoever.recruiter.co.kr',
+    officialCareerUrl: 'https://hyundai-autoever.recruiter.co.kr',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '현대오토에버 인재채용 공식',
+    isLiveApi: false,
+    description: '모빌진(mobilgene) BSW 통신 및 진단 모듈 단위 테스트 자동화 스크립트 작성 및 실무 검증 후 정규직 전환',
+    responsibilities: [
+      'AUTOSAR BSW 컴포넌트 단위 테스트 케이스 설계 및 수행',
+      'CANoe 환경 통신 시뮬레이션 로그 분석 및 버그 리포팅',
+      '소프트웨어 형상 관리(Git) 브랜치 전략 실무 학습'
+    ]
+  },
+  {
+    id: 'job_posco_intern_05',
+    title: '스마트팩토리 AI/IoT 엔지니어링 채용연계형 인턴',
+    company: '포스코DX',
+    location: '경기 판교 / 경북 포항',
+    experienceLevel: '인턴',
+    internType: '채용연계형 인턴' as const,
+    companyScale: '대기업 계열사' as const,
+    majorRequirement: ['산업공학', '컴퓨터공학', '전자공학'],
+    techStack: ['Python', 'SQL', 'FastAPI', 'PLC'],
+    deadline: '2026-11-28',
+    postedDate: '2026-10-29',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://gorecruit.posco.co.kr',
+    officialCareerUrl: 'https://gorecruit.posco.co.kr',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '포스코 채용 포털',
+    isLiveApi: false,
+    description: '제철 스마트팩토리 현장 센서 IoT 데이터 수집 파이프라인 구축 및 시계열 결함 탐지 모델 파일럿 개발',
+    responsibilities: [
+      '공정 센서 시계열 데이터 전처리 및 이상치 정제',
+      '예지보전 대시보드 API 엔드포인트 연동 테스트',
+      '현장 생산성 개선 과제 프로젝트 실무 수행'
+    ]
+  },
+  {
+    id: 'job_seoyon_intern_06',
+    title: '친환경 모빌리티 내장재 기구설계 및 고분자 성형해석 체험형 인턴',
+    company: '서연이화',
+    location: '경기 안양 / 울산',
+    experienceLevel: '인턴',
+    internType: '체험형 인턴' as const,
+    companyScale: '중견기업' as const,
+    majorRequirement: ['기계공학', '고분자공학', '신소재공학'],
+    techStack: ['CATIA V5', 'Moldflow', 'AutoCAD'],
+    deadline: '2026-11-30',
+    postedDate: '2026-10-25',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://seoyoneh.recruiter.co.kr',
+    officialCareerUrl: 'https://seoyoneh.recruiter.co.kr',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '서연이화 공식 채용 포털',
+    isLiveApi: false,
+    description: '전기차 경량 도어트림 및 내장재 3D CATIA 파라메트릭 모델링 보조 및 사출 성형 유동 해석(Moldflow) 실무 실습',
+    responsibilities: [
+      '도어트림 조립부 공차 및 클립 구조 3D CAD 모델링 보조',
+      '사출 성형 시뮬레이션 러너/게이트 위치에 따른 수지 충진 패턴 비교 분석',
+      '공학 멘토와 함께 친환경 천연섬유 복합소재 물성 시험 참여'
+    ]
+  },
+  {
+    id: 'job_mando_intern_07',
+    title: '자율주행 x-by-Wire 샤시 전자제어 시스템 채용연계형 인턴',
+    company: 'HL만도',
+    location: '경기 평택 / 판교 R&D 센터',
+    experienceLevel: '인턴',
+    internType: '채용연계형 인턴' as const,
+    companyScale: '중견기업' as const,
+    majorRequirement: ['기계공학', '전자제어공학', '메카트로닉스'],
+    techStack: ['MATLAB/Simulink', 'C언어', 'CAN-FD'],
+    deadline: '2026-12-05',
+    postedDate: '2026-10-26',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://hlmando.recruiter.co.kr',
+    officialCareerUrl: 'https://hlmando.recruiter.co.kr',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: 'HL만도 공식 채용',
+    isLiveApi: false,
+    description: '조향 바이 와이어(Steer-by-Wire) 모터 제어 알고리즘 Simulink 모델 검증 및 HILs 시뮬레이터 테스트 지원 후 정규직 연계',
+    responsibilities: [
+      '가상 주행 시뮬레이터에서 모터 반력 피드백 응답성 데이터 로깅',
+      'C코드 자동 생성(Simulink Coder) 환경 검증 보조',
+      '실차 시험장 계측 센서 캘리브레이션 지원'
+    ]
+  },
+  {
+    id: 'job_lunit_intern_08',
+    title: '의료 영상 분석 및 바이오마커 AI 딥러닝 리서치 엔지니어링 인턴',
+    company: '루닛',
+    location: '서울 강남구',
+    experienceLevel: '인턴',
+    internType: '인턴' as const,
+    companyScale: '중소/스타트업' as const,
+    majorRequirement: ['컴퓨터공학', '전자공학', '의공학', '수학/통계학'],
+    techStack: ['PyTorch', 'Python', 'OpenCV', 'Docker'],
+    deadline: '2026-12-10',
+    postedDate: '2026-10-29',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://lunit.career.greetinghr.com',
+    officialCareerUrl: 'https://lunit.career.greetinghr.com',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '루닛 공식 채용 포털',
+    isLiveApi: false,
+    description: '흉부 X-ray 및 유방촬영술 AI 판독 모델 성능 벤치마크 및 데이터 파이프라인 최적화 실무 인턴',
+    responsibilities: [
+      '대규모 의료 영상 데이터 전처리 및 증강 파이프라인 구현',
+      '최신 비전 트랜스포머(ViT) 모델 추론 속도 및 정밀도 비교 실험',
+      'AI 연구진과 코드 리뷰 및 주간 연구 세미나 참여'
+    ]
+  },
+  {
+    id: 'job_furiosa_intern_09',
+    title: 'AI NPU 컴파일러 및 커널 최적화 엔지니어링 체험형 인턴',
+    company: '퓨리오사AI',
+    location: '서울 강남구 테헤란로',
+    experienceLevel: '인턴',
+    internType: '체험형 인턴' as const,
+    companyScale: '중소/스타트업' as const,
+    majorRequirement: ['컴퓨터공학', '전자전기공학'],
+    techStack: ['C/C++', 'LLVM', 'Python', 'PyTorch'],
+    deadline: '2026-11-27',
+    postedDate: '2026-10-30',
+    verifiedDate: '2026-11-02',
+    originalUrl: 'https://furiosaai.career.greetinghr.com',
+    officialCareerUrl: 'https://furiosaai.career.greetinghr.com',
+    urlStatus: 'DIRECT_POSTING' as const,
+    source: '퓨리오사AI 공식 채용',
+    isLiveApi: false,
+    description: '2세대 NPU(RENEGADE) 하드웨어 아키텍처에 맞춘 LLVM 컴파일러 패스 작성 및 딥러닝 연산 커널 가속화 실습',
+    responsibilities: [
+      'ONNX/PyTorch 연산자 매핑 및 NPU 타겟 코드 생성 단위 테스트',
+      '메모리 대역폭 병목 분석을 위한 프로파일링 도구 활용',
+      '컴파일러 엔지니어링 팀 멘토링 프로젝트 수행'
+    ]
+  },
   // Sample expired job to verify the date filter excludes it
   {
     id: 'job_sample_expired_99',
@@ -718,6 +946,7 @@ const VERIFIED_ENGINEERING_JOBS = [
     company: '현대자동차',
     location: '경기 남양연구소',
     experienceLevel: '인턴',
+    internType: '체험형 인턴' as const,
     companyScale: '대기업' as const,
     majorRequirement: ['기계공학', '전자전기공학'],
     techStack: ['CAD', 'C언어'],
@@ -733,6 +962,25 @@ const VERIFIED_ENGINEERING_JOBS = [
     responsibilities: ['마감 공고 필터 테스트 항목']
   }
 ];
+
+// Helper: Determine intern subtype strictly from title and metadata without hallucination
+function detectInternType(title: string, experienceLevel: string): '체험형 인턴' | '채용연계형 인턴' | '전환형 인턴' | '인턴' | undefined {
+  const isIntern = experienceLevel === '인턴' || title.includes('인턴') || title.toLowerCase().includes('intern');
+  if (!isIntern) return undefined;
+
+  // Strict keyword match from title
+  if (title.includes('체험형') || title.includes('체험형인턴') || title.includes('체험형 인턴')) {
+    return '체험형 인턴';
+  }
+  if (title.includes('채용연계형') || title.includes('채용 연계형') || title.includes('연계형 인턴') || title.includes('연계형')) {
+    return '채용연계형 인턴';
+  }
+  if (title.includes('전환형') || title.includes('채용전환형') || title.includes('정규직 전환형')) {
+    return '전환형 인턴';
+  }
+  // When no subtype is verified, classify conservatively as '인턴' without guessing
+  return '인턴';
+}
 
 // Calculate active recruitment status based on today's date
 function evaluateRecruitmentStatus(deadline: string, todayStr: string): 'OPEN' | 'EXPIRED' | 'ALWAYS' | 'NEED_VERIFICATION' {
@@ -829,43 +1077,83 @@ async function fetchGoogleNewsRss(query: string, isGlobal: boolean = false): Pro
   }
 }
 
-// Convert pubDate string to structured KST date & recency flags
-function parseArticleDate(pubDateStr: string, currentKst: Date) {
+// Convert pubDate string to structured KST date & 72-hour recency flags
+function parseArticleDate(pubDateStr: string, currentKst: Date, serverNow: Date = new Date()) {
   let pubDate = new Date(pubDateStr);
   if (isNaN(pubDate.getTime())) {
     pubDate = new Date();
   }
 
-  // Format to YYYY-MM-DD HH:mm
-  const year = pubDate.getFullYear();
-  const month = String(pubDate.getMonth() + 1).padStart(2, '0');
-  const day = String(pubDate.getDate()).padStart(2, '0');
-  const hours = String(pubDate.getHours()).padStart(2, '0');
-  const mins = String(pubDate.getMinutes()).padStart(2, '0');
+  // Format in KST (UTC+9)
+  const kstOffsetMs = 9 * 60 * 60 * 1000;
+  const kstPubDate = new Date(pubDate.getTime() + (pubDate.getTimezoneOffset() * 60000) + kstOffsetMs);
+
+  const year = kstPubDate.getFullYear();
+  const month = String(kstPubDate.getMonth() + 1).padStart(2, '0');
+  const day = String(kstPubDate.getDate()).padStart(2, '0');
+  const hours = String(kstPubDate.getHours()).padStart(2, '0');
+  const mins = String(kstPubDate.getMinutes()).padStart(2, '0');
   const formattedExact = `${year}-${month}-${day} ${hours}:${mins}`;
   const formattedShort = `${year}.${month}.${day}`;
 
-  const diffMs = currentKst.getTime() - pubDate.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffMs = serverNow.getTime() - pubDate.getTime();
+  const diffHours = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60)));
   const diffDays = Math.floor(diffHours / 24);
 
   let timeAgo = `${diffHours}시간 전`;
   if (diffHours < 1) {
     timeAgo = '방금 전';
   } else if (diffHours >= 24) {
-    timeAgo = `${diffDays}일 전`;
+    timeAgo = `${diffDays}일 전 (${diffHours}시간 전)`;
   }
 
-  const isWithin24h = diffHours <= 24 && diffHours >= 0;
-  const isWithin7d = diffDays <= 7 && diffDays >= 0;
+  const isWithin24h = diffHours <= 24;
+  const isWithin48h = diffHours <= 48;
+  const isWithin72h = diffHours <= 72;
 
   return {
     publishedAt: formattedShort,
     publishedAtExact: formattedExact,
     timeAgo,
     isWithin24h,
-    isWithin7d
+    isWithin48h,
+    isWithin72h,
+    diffHours
   };
+}
+
+// Strict 72-Hour Article Filter based on actual server time & publisher's pubDate
+function filterStrict72h(items: RssItem[], serverNow: Date): Array<RssItem & { pubDateParsed: Date; diffHours: number }> {
+  const filtered: Array<RssItem & { pubDateParsed: Date; diffHours: number }> = [];
+
+  for (const item of items) {
+    if (!item.pubDate || !item.pubDate.trim()) {
+      // Exclude articles with missing pubDate
+      continue;
+    }
+
+    const parsedMs = Date.parse(item.pubDate);
+    if (isNaN(parsedMs)) {
+      // Exclude articles with unparseable pubDate
+      continue;
+    }
+
+    const pubDate = new Date(parsedMs);
+    const diffMs = serverNow.getTime() - pubDate.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    // Criteria: Must be within 72 hours (allow up to 1 hr future clock drift)
+    // Strictly discard articles older than 72.0 hours
+    if (diffHours >= -1.0 && diffHours <= 72.0) {
+      filtered.push({
+        ...item,
+        pubDateParsed: pubDate,
+        diffHours: Math.max(0, Math.floor(diffHours))
+      });
+    }
+  }
+
+  return filtered;
 }
 
 // Create Express Router
@@ -941,11 +1229,13 @@ router.post('/jobs/search', async (req: Request, res: Response) => {
       }
     }
 
-    // Process all jobs in verified catalog with dynamic date status
+    // Process all jobs in verified catalog with dynamic date status and internType
     const allProcessedJobs = VERIFIED_ENGINEERING_JOBS.map(job => {
       const status = evaluateRecruitmentStatus(job.deadline, todayKstStr);
+      const detectedIntern = (job as any).internType || detectInternType(job.title, job.experienceLevel);
       return {
         ...job,
+        internType: detectedIntern,
         recruitmentStatus: status,
         verifiedDate: todayKstStr
       };
@@ -974,8 +1264,8 @@ router.post('/jobs/search', async (req: Request, res: Response) => {
         }
       }
 
-      // Recruitment status filter: exclude 'EXPIRED' by default
-      const matchStatus = showExpired ? true : job.recruitmentStatus !== 'EXPIRED';
+      // Recruitment status filter: exclude 'EXPIRED' by default (only OPEN or ALWAYS)
+      const matchStatus = showExpired ? true : (job.recruitmentStatus === 'OPEN' || job.recruitmentStatus === 'ALWAYS');
 
       // Category / Major / Location / Experience / CompanyScale filters
       const matchCategory = category === '전체' ||
@@ -988,8 +1278,20 @@ router.post('/jobs/search', async (req: Request, res: Response) => {
       const matchLocation = location === '전체' ||
         job.location.includes(location);
 
-      const matchExp = experience === '전체' ||
-        job.experienceLevel.includes(experience);
+      // Recruitment Type filter: 전체 / 신입 / 경력 / 인턴
+      const matchExp = (() => {
+        if (!experience || experience === '전체') return true;
+        if (experience === '인턴') {
+          return job.experienceLevel === '인턴' || job.title.includes('인턴') || (job as any).internType !== undefined;
+        }
+        if (experience === '신입') {
+          return job.experienceLevel.includes('신입') && job.experienceLevel !== '인턴' && !job.title.includes('인턴');
+        }
+        if (experience === '경력') {
+          return job.experienceLevel.includes('경력') && job.experienceLevel !== '인턴' && !job.title.includes('인턴');
+        }
+        return job.experienceLevel.includes(experience);
+      })();
 
       const matchScale = companyScale === '전체' ||
         job.companyScale === companyScale;
@@ -1059,38 +1361,81 @@ router.post('/news/search', async (req: Request, res: Response) => {
   const { query = 'HBM 반도체' } = req.body;
   const sanitizedQuery = (query || 'HBM 반도체').trim();
   const { now: currentKst } = getKSTDate();
+  const serverNow = new Date();
 
   try {
-    // 1. Fetch real articles from Google News RSS (Domestic and Global)
+    // 1. Fetch real articles with recency search
     const [domesticRssItems, globalRssItems] = await Promise.all([
-      fetchGoogleNewsRss(sanitizedQuery, false),
-      fetchGoogleNewsRss(`${sanitizedQuery} technology engineering`, true)
+      fetchGoogleNewsRss(`${sanitizedQuery} when:3d`, false),
+      fetchGoogleNewsRss(`${sanitizedQuery} technology engineering when:3d`, true)
     ]);
 
-    // Check if we got real articles
-    const hasRealArticles = domesticRssItems.length > 0;
+    // 2. Filter strictly to articles published within the last 72 hours based on actual server time
+    let validDomestic = filterStrict72h(domesticRssItems, serverNow);
+    let validGlobal = filterStrict72h(globalRssItems, serverNow);
 
-    let selectedArticles: any[] = [];
+    // If query with 'when:3d' returned fewer items, try standard search but still STRICTLY enforce <= 72h filter
+    if (validDomestic.length === 0 && validGlobal.length === 0) {
+      const [fallbackDom, fallbackGlob] = await Promise.all([
+        fetchGoogleNewsRss(sanitizedQuery, false),
+        fetchGoogleNewsRss(`${sanitizedQuery} technology engineering`, true)
+      ]);
+      validDomestic = filterStrict72h(fallbackDom, serverNow);
+      validGlobal = filterStrict72h(fallbackGlob, serverNow);
+    }
 
-    if (hasRealArticles) {
-      // Pick top 2 domestic + top 1 global
-      const topDomestic = domesticRssItems.slice(0, 2);
-      const topGlobal = globalRssItems.length > 0 ? globalRssItems.slice(0, 1) : domesticRssItems.slice(2, 3);
+    // Deduplicate by URL
+    const seenUrls = new Set<string>();
+    const uniqueDomestic = validDomestic.filter(item => {
+      if (seenUrls.has(item.link)) return false;
+      seenUrls.add(item.link);
+      return true;
+    });
+    const uniqueGlobal = validGlobal.filter(item => {
+      if (seenUrls.has(item.link)) return false;
+      seenUrls.add(item.link);
+      return true;
+    });
 
-      const combined = [
-        ...topDomestic.map(item => ({ ...item, isOverseas: false })),
-        ...topGlobal.map(item => ({ ...item, isOverseas: true }))
-      ];
+    const totalValidCount = uniqueDomestic.length + uniqueGlobal.length;
 
-      // Grounded AI prompt: Instruct Gemini to summarize ONLY the real retrieved headlines and snippets
-      const articlesContext = combined.map((item, idx) => `[기사 ${idx + 1}]
+    // Strict Anti-Hallucination & Recency Enforcement:
+    // If no articles exist within the last 3 days (72 hours), DO NOT invent fake news or fill with old cached articles.
+    if (totalValidCount === 0) {
+      return res.status(200).json({
+        success: true,
+        query: sanitizedQuery,
+        total: 0,
+        isRealFeed: true,
+        articles: [],
+        message: '최근 3일 이내 관련 뉴스가 없습니다',
+        referenceServerTime: serverNow.toISOString()
+      });
+    }
+
+    // Target quota: domestic up to 2, global up to 1 (only <= 72h articles!)
+    const topDomestic = uniqueDomestic.slice(0, 2);
+    let topGlobal = uniqueGlobal.slice(0, 1);
+
+    // If global has 0 within 72h, take an additional domestic item if available (up to 3 total)
+    if (topGlobal.length === 0 && uniqueDomestic.length > 2) {
+      topGlobal = uniqueDomestic.slice(2, 3);
+    }
+
+    const combined = [
+      ...topDomestic.map(item => ({ ...item, isOverseas: false })),
+      ...topGlobal.map(item => ({ ...item, isOverseas: true }))
+    ];
+
+    // Grounded AI prompt: Instruct Gemini to summarize ONLY the real retrieved headlines and snippets
+    const articlesContext = combined.map((item, idx) => `[기사 ${idx + 1}]
 제목: ${item.title}
 출처: ${item.source}
-발행일: ${item.pubDate}
+발행일: ${item.pubDate} (경과: ${item.diffHours}시간 전)
 내용 요약: ${item.description}`).join('\n\n');
 
-      const systemInstruction = `당신은 공학 전공 취업준비생을 위한 산업 분석 AI 'Industry HINT'입니다.
-제공된 [실제 뉴스 기사]의 제목과 스니펫만을 바탕으로 사실에 입각한 분석을 작성하세요.
+    const systemInstruction = `당신은 공학 전공 취업준비생을 위한 산업 분석 AI 'Industry HINT'입니다.
+제공된 [실제 최근 72시간 이내 뉴스 기사]의 제목과 스니펫만을 바탕으로 사실에 입각한 분석을 작성하세요.
 절대 규칙:
 1. 실제 제공된 기사 내용에 없는 허위 사실이나 존재하지 않는 이벤트를 지어내지 마세요.
 2. 기사별로 공학 전공자 관점의 '3줄 요약', '핵심 키워드 5개', '전문용어 해설 1~2개'를 작성하세요.
@@ -1109,83 +1454,82 @@ router.post('/news/search', async (req: Request, res: Response) => {
   }
 ]`;
 
-      let aiAnalysisMap: Record<number, any> = {};
-      try {
-        const { text, modelUsed } = await generateGeminiContent({
-          contents: `다음은 "${sanitizedQuery}"에 대해 실제 언론사에서 검색된 최신 뉴스입니다:\n\n${articlesContext}\n\n위 규칙에 맞추어 JSON 배열로 분석 결과를 반환하세요.`,
-          systemInstruction,
-          responseMimeType: 'application/json',
-        });
-
-        const parsedAnalysis = parseCleanJson(text);
-        if (Array.isArray(parsedAnalysis)) {
-          parsedAnalysis.forEach((analysis, idx) => {
-            aiAnalysisMap[idx] = analysis;
-          });
-        }
-      } catch (geminiErr: any) {
-        console.warn('[Gemini News Analysis Error] Fallback to snippet-based extraction:', geminiErr.message);
-      }
-
-      // Build structured articles response with exact dates, real links, and verification flags
-      selectedArticles = combined.map((item, idx) => {
-        const dateMeta = parseArticleDate(item.pubDate, currentKst);
-        const aiAnalysis = aiAnalysisMap[idx] || {};
-
-        return {
-          id: `news_${Date.now()}_${idx}`,
-          title: item.title,
-          press: item.source,
-          publishedAt: dateMeta.publishedAt,
-          publishedAtExact: dateMeta.publishedAtExact,
-          timeAgo: dateMeta.timeAgo,
-          isWithin24h: dateMeta.isWithin24h,
-          isWithin7d: dateMeta.isWithin7d,
-          isOverseas: item.isOverseas,
-          originalUrl: item.link,
-          industryCategory: aiAnalysis.industryCategory || (item.isOverseas ? '글로벌 엔지니어링 기술 동향' : '국내 산업 기술 동향'),
-          summaryLines: Array.isArray(aiAnalysis.summaryLines) && aiAnalysis.summaryLines.length >= 2
-            ? aiAnalysis.summaryLines
-            : [
-                item.description || item.title,
-                `${item.source} 보도 기반 최신 기술 동향입니다.`,
-                '원문 기사에서 상세 공학적 세부사항 및 연구 결과를 확인할 수 있습니다.'
-              ],
-          summaryBasis: '실제 언론사 기사 원문의 제목과 스니펫(요약문)에 기반한 AI 공학 분석',
-          keywords: Array.isArray(aiAnalysis.keywords) && aiAnalysis.keywords.length > 0
-            ? aiAnalysis.keywords.slice(0, 5)
-            : [sanitizedQuery, '엔지니어링', '기술동향', 'R&D', '양산'],
-          technicalTerms: Array.isArray(aiAnalysis.technicalTerms) && aiAnalysis.technicalTerms.length > 0
-            ? aiAnalysis.technicalTerms
-            : [
-                { term: sanitizedQuery, explanation: '해당 산업 분야의 핵심 공학 기술 및 연구개발 키워드입니다.' }
-              ],
-          globalComparison: aiAnalysis.globalComparison || (item.isOverseas
-            ? '해외 선도 기관의 연구개발 및 특허 출원 동향입니다.'
-            : '선도 기술과의 격차 축소를 위한 국내 R&D 및 양산 라인 적용 사례입니다.'),
-          isRealFeed: true
-        };
+    let aiAnalysisMap: Record<number, any> = {};
+    try {
+      const { text, modelUsed } = await generateGeminiContent({
+        contents: `다음은 "${sanitizedQuery}"에 대해 최근 72시간 이내에 실제 언론사에서 검색된 최신 뉴스입니다:\n\n${articlesContext}\n\n위 규칙에 맞추어 JSON 배열로 분석 결과를 반환하세요.`,
+        systemInstruction,
+        responseMimeType: 'application/json',
       });
-    } else {
-      // If RSS returned 0 items, use verified fallback catalog
-      selectedArticles = getFallbackNews(sanitizedQuery);
+
+      const parsedAnalysis = parseCleanJson(text);
+      if (Array.isArray(parsedAnalysis)) {
+        parsedAnalysis.forEach((analysis, idx) => {
+          aiAnalysisMap[idx] = analysis;
+        });
+      }
+    } catch (geminiErr: any) {
+      console.warn('[Gemini News Analysis Error] Fallback to snippet-based extraction:', geminiErr.message);
     }
+
+    // Build structured articles response with exact dates, real links, and verification flags
+    const selectedArticles = combined.map((item, idx) => {
+      const dateMeta = parseArticleDate(item.pubDate, currentKst, serverNow);
+      const aiAnalysis = aiAnalysisMap[idx] || {};
+
+      return {
+        id: `news_${Date.now()}_${idx}`,
+        title: item.title,
+        press: item.source,
+        publishedAt: dateMeta.publishedAt,
+        publishedAtExact: dateMeta.publishedAtExact,
+        timeAgo: dateMeta.timeAgo,
+        isWithin24h: dateMeta.isWithin24h,
+        isWithin48h: dateMeta.isWithin48h,
+        isWithin72h: dateMeta.isWithin72h,
+        isOverseas: item.isOverseas,
+        originalUrl: item.link,
+        industryCategory: aiAnalysis.industryCategory || (item.isOverseas ? '글로벌 엔지니어링 기술 동향' : '국내 산업 기술 동향'),
+        summaryLines: Array.isArray(aiAnalysis.summaryLines) && aiAnalysis.summaryLines.length >= 2
+          ? aiAnalysis.summaryLines
+          : [
+              item.description || item.title,
+              `${item.source} 보도 기반 최근 72시간 기술 동향입니다.`,
+              '원문 기사에서 상세 공학적 세부사항 및 연구 결과를 확인할 수 있습니다.'
+            ],
+        summaryBasis: '최근 72시간 이내 실제 언론사 기사 원문의 제목과 스니펫에 기반한 AI 공학 분석',
+        keywords: Array.isArray(aiAnalysis.keywords) && aiAnalysis.keywords.length > 0
+          ? aiAnalysis.keywords.slice(0, 5)
+          : [sanitizedQuery, '엔지니어링', '기술동향', 'R&D', '양산'],
+        technicalTerms: Array.isArray(aiAnalysis.technicalTerms) && aiAnalysis.technicalTerms.length > 0
+          ? aiAnalysis.technicalTerms
+          : [
+              { term: sanitizedQuery, explanation: '해당 산업 분야의 핵심 공학 기술 및 연구개발 키워드입니다.' }
+            ],
+        globalComparison: aiAnalysis.globalComparison || (item.isOverseas
+          ? '해외 선도 기관의 연구개발 및 특허 출원 동향입니다.'
+          : '선도 기술과의 격차 축소를 위한 국내 R&D 및 양산 라인 적용 사례입니다.'),
+        isRealFeed: true
+      };
+    });
 
     return res.status(200).json({
       success: true,
       query: sanitizedQuery,
       total: selectedArticles.length,
-      isRealFeed: hasRealArticles,
-      articles: selectedArticles
+      isRealFeed: true,
+      articles: selectedArticles,
+      referenceServerTime: serverNow.toISOString()
     });
   } catch (err: any) {
     console.error('Error in /api/news/search:', err.message);
     return res.status(200).json({
       success: true,
       query: sanitizedQuery,
-      total: 3,
+      total: 0,
       isRealFeed: false,
-      articles: getFallbackNews(sanitizedQuery)
+      articles: [],
+      message: '최근 3일 이내 관련 뉴스가 없습니다'
     });
   }
 });

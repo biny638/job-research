@@ -105,7 +105,7 @@ export const JobSearch: React.FC<JobSearchProps> = ({
     '서울'
   ];
 
-  const experiences = ['전체', '신입', '경력', '신입/경력', '인턴'];
+  const experiences = ['전체', '신입', '경력', '인턴'];
 
   const handleSearch = async () => {
     setLoading(true);
@@ -325,7 +325,7 @@ export const JobSearch: React.FC<JobSearchProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-400 font-medium mb-1">경력 구분</label>
+              <label className="block text-slate-400 font-medium mb-1">채용 유형</label>
               <select
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
@@ -336,6 +336,24 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Quick Recruitment Type Filter Bar (전체 / 신입 / 경력 / 인턴) */}
+          <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-800/50">
+            <span className="text-xs text-slate-400 font-semibold mr-1">채용 유형 선택:</span>
+            {experiences.map((exp) => (
+              <button
+                key={exp}
+                onClick={() => setExperience(exp)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  experience === exp
+                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
+                    : 'bg-slate-800/80 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700'
+                }`}
+              >
+                {exp === '인턴' ? '인턴 (체험형·채용연계형·전환형)' : exp}
+              </button>
+            ))}
           </div>
 
           {/* Active Recruitment Filter Toggle */}
@@ -484,9 +502,15 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                       <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">
                         {job.companyScale || '기업'}
                       </span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">
-                        {job.experienceLevel}
-                      </span>
+                      {job.internType ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950/90 text-amber-300 border border-amber-600/50">
+                          {job.internType}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">
+                          {job.experienceLevel}
+                        </span>
+                      )}
                       {renderStatusBadge(job.recruitmentStatus)}
                     </div>
 
@@ -554,6 +578,15 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                     <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
                       {selectedJob.companyScale || '기업'}
                     </span>
+                    {selectedJob.internType ? (
+                      <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-950/90 text-amber-300 border border-amber-500/50">
+                        {selectedJob.internType}
+                      </span>
+                    ) : (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                        {selectedJob.experienceLevel}
+                      </span>
+                    )}
                     {renderStatusBadge(selectedJob.recruitmentStatus)}
                     <span className="text-[11px] text-slate-500">
                       출처: {selectedJob.source}

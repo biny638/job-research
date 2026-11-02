@@ -45,7 +45,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState<IndustryNews[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const [periodFilter, setPeriodFilter] = useState<'ALL' | '24H' | '7D'>('ALL');
+  const [periodFilter, setPeriodFilter] = useState<'ALL' | '24H' | '48H'>('ALL');
 
   // Related news modal or expanded state
   const [relatedLoading, setRelatedLoading] = useState(false);
@@ -101,10 +101,10 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
 
   const isSaved = (newsId: string) => savedNews.some(n => n.id === newsId);
 
-  // Filter articles by publication recency
+  // Filter articles by publication recency strictly within 72 hours
   const filteredArticles = articles.filter((art) => {
     if (periodFilter === '24H') return art.isWithin24h;
-    if (periodFilter === '7D') return art.isWithin7d;
+    if (periodFilter === '48H') return art.isWithin48h;
     return true;
   });
 
@@ -116,21 +116,21 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-xs text-cyan-300 font-semibold">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Industry HINT — 실시간 언론사 뉴스 기반 AI 공학 브리핑</span>
+              <span>Industry HINT — 최근 72시간(3일) 이내 실시간 언론사 뉴스 기반 AI 공학 브리핑</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>실제 기사 RSS 연동 (가짜 기사 창작 금지)</span>
+              <span>최근 72시간 검증 필터 (과거 기사·허위 기사 배제)</span>
             </div>
           </div>
 
           <div className="max-w-4xl space-y-1.5">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              기업과 산업의 기술 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">공학의 시선</span>으로 꿰뚫다
+              기업과 산업의 최신 기술 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">공학의 시선</span>으로 꿰뚫다
             </h1>
             <p className="text-slate-300 text-sm leading-relaxed">
-              Google News 실시간 피드에서 수집된 <strong>실제 언론사 기사(국내 2건 + 글로벌 1건)</strong>의 제목과 스니펫에 근거하여,
-              Gemini 3.8 Flash가 <strong>3줄 공학 요약, 5대 기술 키워드, 전공 전문용어 해설 및 기술 비교</strong>를 도출합니다.
+              Google News 실시간 피드에서 <strong>검색 시점 기준 최근 72시간(3일) 이내에 발행된 실제 언론사 기사(국내 최대 2건 + 글로벌 1건)</strong>만을 엄격히 선별하여,
+              Gemini 3.8 Flash가 <strong>3줄 공학 요약, 5대 기술 키워드, 전공 전문용어 해설 및 기술 비교</strong>를 도출합니다. 과거 기사로 개수를 채우지 않습니다.
             </p>
           </div>
 
@@ -200,7 +200,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
-                전체 ({articles.length}건)
+                최근 72시간 전체 ({articles.length}건)
               </button>
               <button
                 onClick={() => setPeriodFilter('24H')}
@@ -210,17 +210,17 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
-                최근 24시간 이내
+                24시간 이내
               </button>
               <button
-                onClick={() => setPeriodFilter('7D')}
+                onClick={() => setPeriodFilter('48H')}
                 className={`px-2.5 py-1 rounded-md transition-colors ${
-                  periodFilter === '7D'
+                  periodFilter === '48H'
                     ? 'bg-blue-600 text-white font-bold'
                     : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
-                최근 7일 이내
+                48시간 이내
               </button>
             </div>
           </div>
@@ -293,19 +293,21 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                         {item.publishedAtExact || item.publishedAt}
                       </span>
 
-                      {/* Recency Tag */}
+                      {/* Recency Tag (Strictly within 72h) */}
                       {item.isWithin24h ? (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                           24시간 이내 ({item.timeAgo})
                         </span>
-                      ) : item.isWithin7d ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-950 text-blue-300 border border-blue-800/40">
-                          7일 이내 ({item.timeAgo})
+                      ) : item.isWithin48h ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-950 text-cyan-300 border border-blue-800/40">
+                          48시간 이내 ({item.timeAgo})
                         </span>
-                      ) : item.timeAgo ? (
-                        <span className="text-[11px] text-slate-500">{item.timeAgo}</span>
-                      ) : null}
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-750">
+                          72시간 이내 ({item.timeAgo})
+                        </span>
+                      )}
 
                       {item.industryCategory && (
                         <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-cyan-300 border border-slate-700">
@@ -431,15 +433,40 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
         </div>
       )}
 
-      {/* When 0 articles found for the filter */}
-      {!loading && hasSearched && filteredArticles.length === 0 && (
+      {/* When 0 articles found within 3 days (Strict 72-hour requirement) */}
+      {!loading && hasSearched && articles.length === 0 && (
+        <div className="p-10 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-3 shadow-xl">
+          <div className="w-12 h-12 rounded-full bg-slate-800 text-cyan-400 flex items-center justify-center mx-auto">
+            <Clock className="w-6 h-6" />
+          </div>
+          <div className="space-y-1.5">
+            <h3 className="text-base font-bold text-white">최근 3일 이내 관련 뉴스가 없습니다</h3>
+            <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+              검색 시점 기준 최근 72시간(3일) 이내에 실제 언론사에서 발행된 기사가 없습니다.<br />
+              ENGINEER JOB은 기사 수를 억지로 채우기 위해 과거 기사나 가상 뉴스를 생성하지 않습니다.
+            </p>
+          </div>
+          <div className="pt-2">
+            <button
+              onClick={() => onNavigateToCompany(query)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors cursor-pointer shadow-md"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>'{query}' 기업 정보 및 공시자료 확인하기</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* When articles exist but filteredArticles is empty due to 24H/48H filter */}
+      {!loading && hasSearched && articles.length > 0 && filteredArticles.length === 0 && (
         <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center text-xs text-slate-400 space-y-2">
-          <p>선택하신 발행 시점 조건에 일치하는 기사가 없습니다.</p>
+          <p>선택하신 세부 시간 조건({periodFilter === '24H' ? '24시간 이내' : '48시간 이내'})에 일치하는 기사가 없습니다.</p>
           <button
             onClick={() => setPeriodFilter('ALL')}
             className="text-cyan-400 font-semibold underline cursor-pointer"
           >
-            전체 기간 보기로 변경
+            최근 72시간 전체 보기로 변경
           </button>
         </div>
       )}

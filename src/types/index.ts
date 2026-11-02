@@ -9,6 +9,7 @@ export interface Job {
   company: string;
   location: string;
   experienceLevel: '신입' | '경력' | '신입/경력' | '인턴' | string;
+  internType?: '체험형 인턴' | '채용연계형 인턴' | '전환형 인턴' | '인턴';
   majorRequirement: string[];
   techStack: string[];
   deadline: string;
@@ -40,6 +41,8 @@ export interface IndustryNews {
   publishedAtExact?: string;
   timeAgo?: string;
   isWithin24h?: boolean;
+  isWithin48h?: boolean;
+  isWithin72h?: boolean;
   isWithin7d?: boolean;
   isOverseas: boolean;
   originalUrl: string;
