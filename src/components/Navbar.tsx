@@ -86,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-slate-100 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Header Bar */}
         <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
           
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation (Visible on lg: screens >= 1024px) */}
-          <nav className="hidden lg:flex items-center gap-1 flex-shrink-0">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-shrink-0">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -123,7 +123,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 cursor-pointer ${
+                  className={`relative flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 cursor-pointer ${
                     isActive
                       ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/80'

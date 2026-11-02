@@ -50,14 +50,17 @@ export const JobSearch: React.FC<JobSearchProps> = ({
   const [experience, setExperience] = useState('전체');
   const [companyScale, setCompanyScale] = useState('전체');
   const [showOnlyOpen, setShowOnlyOpen] = useState(true); // Default ON to exclude expired postings
+  const [sortBy, setSortBy] = useState<'latest' | 'deadline'>('latest');
 
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  // Response metadata for zero-match authentic company handling
+  // Response metadata for zero-match authentic company handling and external API
   const [referenceDate, setReferenceDate] = useState<string>('');
   const [searchedCompanyInfo, setSearchedCompanyInfo] = useState<any | null>(null);
+  const [externalApiStatus, setExternalApiStatus] = useState<any | null>(null);
+  const [showApiGuide, setShowApiGuide] = useState(false);
   const [emptySearchFeedback, setEmptySearchFeedback] = useState<{
     companyName?: string;
     message?: string;
@@ -80,7 +83,8 @@ export const JobSearch: React.FC<JobSearchProps> = ({
     '대기업 계열사',
     '중견기업',
     '공기업/공공기관',
-    '외국계'
+    '외국계',
+    '중소/스타트업'
   ];
 
   const majors = [
@@ -107,6 +111,17 @@ export const JobSearch: React.FC<JobSearchProps> = ({
 
   const experiences = ['전체', '신입', '경력', '인턴'];
 
+  const resetAllFilters = () => {
+    setQuery('');
+    setCategory('전체');
+    setMajor('전체');
+    setLocation('전체');
+    setExperience('전체');
+    setCompanyScale('전체');
+    setShowOnlyOpen(true);
+    setSortBy('latest');
+  };
+
   const handleSearch = async () => {
     setLoading(true);
     setEmptySearchFeedback(null);
@@ -119,11 +134,15 @@ export const JobSearch: React.FC<JobSearchProps> = ({
         location: location === '전체' ? '' : location,
         experience: experience === '전체' ? '' : experience,
         companyScale: companyScale === '전체' ? '' : companyScale,
-        showExpired: !showOnlyOpen
+        showExpired: !showOnlyOpen,
+        sortBy
       });
 
       if (res.referenceDate) {
         setReferenceDate(res.referenceDate);
+      }
+      if (res.externalApiStatus) {
+        setExternalApiStatus(res.externalApiStatus);
       }
 
       if (res.success && res.jobs) {
@@ -155,7 +174,7 @@ export const JobSearch: React.FC<JobSearchProps> = ({
 
   useEffect(() => {
     handleSearch();
-  }, [category, major, location, experience, companyScale, showOnlyOpen]);
+  }, [category, major, location, experience, companyScale, showOnlyOpen, sortBy]);
 
   const isSaved = (jobId: string) => savedJobs.some(j => j.id === jobId);
 
@@ -356,7 +375,7 @@ export const JobSearch: React.FC<JobSearchProps> = ({
             ))}
           </div>
 
-          {/* Active Recruitment Filter Toggle */}
+          {/* Active Recruitment Filter Toggle & Sort selector */}
           <div className="flex flex-wrap items-center justify-between pt-1 gap-2 text-xs">
             <div className="flex items-center gap-2">
               <label className="inline-flex items-center gap-2 cursor-pointer select-none">
@@ -375,27 +394,108 @@ export const JobSearch: React.FC<JobSearchProps> = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-slate-400 text-[11px]">
-              <span className="inline-flex items-center gap-1 text-slate-300">
+            <div className="flex items-center gap-3">
+              {/* Reset filter button */}
+              <button
+                onClick={resetAllFilters}
+                className="text-[11px] text-slate-400 hover:text-cyan-300 underline cursor-pointer transition-colors"
+              >
+                필터 전체 초기화
+              </button>
+
+              <span className="inline-flex items-center gap-1 text-slate-300 text-[11px]">
                 <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                AI 허위 공고 생성 원천 차단 (Fact-Grounding)
+                AI 허위 공고 생성 원천 차단
               </span>
             </div>
           </div>
         </div>
       </div>
 
+      {/* External API Integration Status Banner */}
+      {externalApiStatus && (
+        <div className={`p-3.5 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs ${
+          externalApiStatus.configured && externalApiStatus.status === 'CONNECTED'
+            ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300'
+            : 'bg-slate-900/90 border-slate-800 text-slate-300'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
+              externalApiStatus.configured && externalApiStatus.status === 'CONNECTED' ? 'bg-emerald-400 animate-pulse' : 'bg-cyan-400'
+            }`}></span>
+            <span className="font-bold text-white">{externalApiStatus.provider}</span>
+            <span className="text-slate-400">•</span>
+            <span className="text-slate-300 text-[11px]">{externalApiStatus.statusMessage}</span>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => setShowApiGuide(!showApiGuide)}
+              className="text-[11px] text-cyan-400 hover:text-cyan-300 underline cursor-pointer font-medium"
+            >
+              {showApiGuide ? 'API 연동 안내 닫기' : '고용24 API 연동 가이드'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Collapsible API Integration Guide */}
+      {showApiGuide && (
+        <div className="p-4 rounded-xl bg-slate-900 border border-cyan-500/30 text-xs space-y-2 text-slate-300">
+          <div className="flex items-center justify-between">
+            <h4 className="font-bold text-white flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span>고용24(구 워크넷) OPEN API 실시간 연동 방법</span>
+            </h4>
+            <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/40">
+              환경변수 설정
+            </span>
+          </div>
+          <p className="text-[11px] text-slate-400 leading-relaxed">
+            1. <a href="https://www.work24.go.kr/cm/c/a/1110/openApiGuideList.do" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline font-semibold">고용24 OpenAPI 포털</a>에서 OpenAPI 인증키를 발급받습니다.<br />
+            2. Vercel 프로젝트 대시보드 → <strong>Project Settings → Environment Variables</strong>에 키 이름 <code className="text-cyan-300 bg-slate-800 px-1 py-0.5 rounded">WORK24_API_KEY</code>로 등록합니다.<br />
+            3. 인증키가 등록되면 실시간 공고 10만여 건이 자동으로 통합 검색되며, 미등록 시에도 <strong>사전 전수 검증된 32건의 대기업·계열사·중견기업 공고</strong>가 안전하게 제공됩니다.
+          </p>
+        </div>
+      )}
+
       {/* Main Content Layout: Job List & Detail View */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Job Card List (5 cols on desktop) */}
         <div className="lg:col-span-5 space-y-3">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-semibold text-slate-400">
-              검색 결과 <strong className="text-cyan-400">{jobs.length}</strong>건
-            </span>
-            <span className="text-[11px] text-slate-500">
-              {showOnlyOpen ? '접수 마감 공고 제외됨' : '모든 공고 표시 중'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-slate-400">
+                검색 결과 <strong className="text-cyan-400">{jobs.length}</strong>건
+              </span>
+              <span className="text-[11px] text-slate-500">
+                {showOnlyOpen ? '(마감 제외)' : '(마감 포함)'}
+              </span>
+            </div>
+
+            {/* Sort Toggle Controls */}
+            <div className="flex items-center gap-1 text-[11px]">
+              <button
+                onClick={() => setSortBy('latest')}
+                className={`px-2 py-0.5 rounded-md font-medium transition-colors cursor-pointer ${
+                  sortBy === 'latest'
+                    ? 'bg-cyan-600 text-white font-bold'
+                    : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                최신순
+              </button>
+              <button
+                onClick={() => setSortBy('deadline')}
+                className={`px-2 py-0.5 rounded-md font-medium transition-colors cursor-pointer ${
+                  sortBy === 'deadline'
+                    ? 'bg-cyan-600 text-white font-bold'
+                    : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                마감 임박순
+              </button>
+            </div>
           </div>
 
           {/* Empty Result with Anti-Hallucination & Authentic Corporate Navigation */}
@@ -405,13 +505,21 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                 <div className="p-2.5 rounded-xl bg-amber-950/50 border border-amber-600/30 text-amber-400">
                   <AlertCircle className="w-5 h-5" />
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5 flex-1">
                   <h3 className="text-sm font-bold text-white">
-                    {emptySearchFeedback?.companyName ? `'${emptySearchFeedback.companyName}' 공고 조회 결과` : '검색 결과가 없습니다'}
+                    {emptySearchFeedback?.companyName ? `'${emptySearchFeedback.companyName}' 공고 조회 결과` : '일치하는 공고가 없습니다'}
                   </h3>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    {emptySearchFeedback?.message || '조건에 맞는 실시간 모집 공고가 없습니다. AI는 존재하지 않는 허위 공고를 지어내지 않습니다.'}
+                    {emptySearchFeedback?.message || '선택하신 조건(기업규모, 산업분야, 전공, 지역, 채용유형)에 일치하는 실시간 공고가 없습니다. AI는 존재하지 않는 허위 공고를 지어내지 않습니다.'}
                   </p>
+                  <div className="pt-1">
+                    <button
+                      onClick={resetAllFilters}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-colors cursor-pointer shadow"
+                    >
+                      <span>필터 전체 초기화하고 모든 공고 보기</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -534,6 +642,15 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                     {job.title}
                   </h3>
 
+                  {/* Salary info if available */}
+                  {job.salary && (
+                    <div className="mb-2">
+                      <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded-md inline-block">
+                        급여: {job.salary}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400 mb-3">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3 h-3 text-slate-500" />
@@ -609,6 +726,14 @@ export const JobSearch: React.FC<JobSearchProps> = ({
                 <h2 className="text-lg sm:text-xl font-extrabold text-white leading-snug">
                   {selectedJob.title}
                 </h2>
+
+                {/* Salary Highlight in Detailed View */}
+                {selectedJob.salary && (
+                  <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-medium">예상 처우 및 급여 조건:</span>
+                    <span className="font-bold text-emerald-300">{selectedJob.salary}</span>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs">
                   <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800">

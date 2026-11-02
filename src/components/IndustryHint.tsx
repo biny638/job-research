@@ -23,7 +23,8 @@ import {
   CheckCircle2,
   ShieldCheck,
   Building2,
-  Filter
+  Filter,
+  ChevronDown
 } from 'lucide-react';
 import { IndustryNews } from '../types';
 import { ApiService } from '../services/api';
@@ -46,6 +47,14 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
   const [articles, setArticles] = useState<IndustryNews[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [periodFilter, setPeriodFilter] = useState<'ALL' | '24H' | '48H'>('ALL');
+  const [expandedNewsIds, setExpandedNewsIds] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedNewsIds(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   // Related news modal or expanded state
   const [relatedLoading, setRelatedLoading] = useState(false);
@@ -346,33 +355,29 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     {item.title}
                   </h3>
 
-                  {/* Grounded Summary Box with Disclaimer */}
-                  <div className="p-4 rounded-xl bg-slate-950/70 border border-cyan-900/30 space-y-3">
-                    <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                  {/* Module 1: Comprehensive Summary (4~6 Sentences Detailed Engineering Summary) */}
+                  <div className="p-4 rounded-xl bg-slate-950/70 border border-cyan-900/40 space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-cyan-400">
                       <div className="flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Gemini 3.8 Flash 핵심 공학 요약 (3줄)</span>
+                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>핵심 공학 분석 요약 (Gemini 3.8 Flash)</span>
                       </div>
-                      <span className="text-[11px] text-slate-400 font-normal normal-case flex items-center gap-1">
+                      <span className="text-[11px] text-slate-400 font-normal flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        제목·스니펫 근거 기반 요약
+                        4~6문장 심층 요약
                       </span>
                     </div>
 
-                    <ul className="space-y-1.5 text-xs text-slate-200 leading-relaxed list-decimal list-inside">
-                      {item.summaryLines && item.summaryLines.map((line, lIdx) => (
-                        <li key={lIdx} className="pl-1">
-                          {line}
-                        </li>
-                      ))}
-                    </ul>
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal whitespace-pre-line">
+                      {item.comprehensiveSummary || (item.summaryLines && item.summaryLines.join(' '))}
+                    </p>
                   </div>
 
                   {/* 5 Core Keywords */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-slate-400">
-                        핵심 기술 키워드 (클릭 시 실시간 관련 기사 탐색)
+                        핵심 기술 키워드 (클릭 시 실시간 관련 기사 탐색):
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -383,7 +388,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                           className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 border cursor-pointer ${
                             activeRelatedKeyword === kw
                               ? 'bg-cyan-600 text-white border-cyan-400'
-                              : 'bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border-slate-700 hover:border-cyan-500/50'
+                              : 'bg-slate-800/80 hover:bg-slate-750 text-cyan-300 border-slate-700 hover:border-cyan-500/50'
                           }`}
                         >
                           <Tag className="w-3 h-3 text-cyan-400" />
@@ -393,37 +398,159 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     </div>
                   </div>
 
-                  {/* Technical Jargon & Plain Explanation */}
-                  {item.technicalTerms && item.technicalTerms.length > 0 && (
-                    <div className="p-4 rounded-xl bg-slate-850/60 border border-slate-800 space-y-2.5">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
-                        <BookOpen className="w-3.5 h-3.5" />
-                        <span>어려운 전문용어와 쉬운 설명 (기술 면접 대비)</span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                        {item.technicalTerms.map((termItem, tIdx) => (
-                          <div key={tIdx} className="p-3 rounded-lg bg-slate-900 border border-slate-750 space-y-1">
-                            <span className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                              {termItem.term}
-                            </span>
-                            <p className="text-[11px] text-slate-300 leading-relaxed">
-                              {termItem.explanation}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  {/* Collapsible Accordion Toggle Button */}
+                  <div>
+                    <button
+                      onClick={() => toggleExpand(item.id)}
+                      className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                        expandedNewsIds[item.id]
+                          ? 'bg-cyan-950/40 border-cyan-500/50 text-cyan-300 shadow-md shadow-cyan-950/20'
+                          : 'bg-slate-850 hover:bg-slate-800 border-slate-750 text-slate-200'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Cpu className="w-4 h-4 text-cyan-400" />
+                        <span>
+                          {expandedNewsIds[item.id] ? '상세 공학 분석 접기' : '상세 공학 분석 펼치기 (소주제 분석 · 산업 영향 · 전문용어 · 취업 인사이트)'}
+                        </span>
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-cyan-400 transition-transform duration-200 ${expandedNewsIds[item.id] ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
 
-                  {/* Domestic vs Overseas Technology Comparison */}
-                  {item.globalComparison && (
-                    <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-800/30 text-xs flex items-start gap-2.5">
-                      <Globe className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <span className="font-bold text-purple-300 block mb-0.5">글로벌 기술 대비 관점:</span>
-                        <p className="text-slate-300 text-[11px] leading-relaxed">{item.globalComparison}</p>
-                      </div>
+                  {/* Collapsible 5-Module Deep Engineering Content */}
+                  {expandedNewsIds[item.id] && (
+                    <div className="space-y-4 pt-2 border-t border-slate-800 animate-fadeIn">
+                      {/* Module 2: Detailed Sections (기술, 공정, 시장 등 2~3개 소주제) */}
+                      {item.detailedSections && item.detailedSections.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
+                            <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                            <span>1) 주요 내용 상세 분석 (소주제별)</span>
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {item.detailedSections.map((sec, sIdx) => (
+                              <div key={sIdx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                <span className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                                  {sec.topic}
+                                </span>
+                                <p className="text-xs text-slate-300 leading-relaxed">
+                                  {sec.content}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Module 3: Industry Impact (확인된 사실 vs 향후 전망 분리) */}
+                      {item.industryImpact && (
+                        <div className="space-y-2">
+                          <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>2) 산업에 미치는 영향 (확인된 사실 vs 향후 전망)</span>
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-900/30 space-y-2">
+                              <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                                <span>확인된 사실 (Confirmed Facts)</span>
+                              </span>
+                              <ul className="space-y-1 text-slate-300 list-disc list-inside leading-relaxed text-[11px]">
+                                {(item.industryImpact.confirmedFacts || []).map((fact, fIdx) => (
+                                  <li key={fIdx} className="pl-1">{fact}</li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-slate-950 border border-purple-900/30 space-y-2">
+                              <span className="font-bold text-purple-400 flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                                <span>향후 전망 (Future Projections)</span>
+                              </span>
+                              <ul className="space-y-1 text-slate-300 list-disc list-inside leading-relaxed text-[11px]">
+                                {(item.industryImpact.futureProjections || []).map((proj, pIdx) => (
+                                  <li key={pIdx} className="pl-1">{proj}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Module 4: Technical Terms (전문용어 설명) */}
+                      {item.technicalTerms && item.technicalTerms.length > 0 && (
+                        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
+                            <BookOpen className="w-3.5 h-3.5" />
+                            <span>3) 전문용어 설명 (기술 면접 대비 핵심 개념)</span>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            {item.technicalTerms.map((termItem, tIdx) => (
+                              <div key={tIdx} className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                                <span className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                                  {termItem.term}
+                                </span>
+                                <p className="text-[11px] text-slate-300 leading-relaxed">
+                                  {termItem.explanation}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Module 5: Career Insights (취업 준비 인사이트) */}
+                      {item.careerInsights && (
+                        <div className="p-4 rounded-xl bg-gradient-to-r from-slate-950 via-cyan-950/20 to-slate-950 border border-cyan-500/30 space-y-2.5 text-xs">
+                          <h4 className="font-bold text-cyan-300 flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>4) 취업 준비 인사이트 (관련 직무 · 필요 역량 · 면접 활용 팁)</span>
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            <div className="p-3 rounded-lg bg-slate-900/90 border border-slate-800 space-y-1">
+                              <span className="text-slate-400 text-[10px] block font-semibold">관련 엔지니어링 직무</span>
+                              <div className="flex flex-wrap gap-1">
+                                {(item.careerInsights.targetRoles || []).map((r, rIdx) => (
+                                  <span key={rIdx} className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/40 text-[10px] font-medium">
+                                    {r}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="p-3 rounded-lg bg-slate-900/90 border border-slate-800 space-y-1">
+                              <span className="text-slate-400 text-[10px] block font-semibold">요구 및 필요 역량</span>
+                              <div className="flex flex-wrap gap-1">
+                                {(item.careerInsights.requiredSkills || []).map((s, sIdx) => (
+                                  <span key={sIdx} className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">
+                                    {s}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {item.careerInsights.preparationTips && (
+                            <div className="p-3 rounded-lg bg-cyan-950/30 border border-cyan-800/40 text-[11px] text-cyan-200/90 leading-relaxed">
+                              <strong>면접/자소서 활용 팁:</strong> {item.careerInsights.preparationTips}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Global Comparison */}
+                      {item.globalComparison && (
+                        <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-800/30 text-xs flex items-start gap-2.5">
+                          <Globe className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-purple-300 block mb-0.5">5) 글로벌 기술 대비 관점:</span>
+                            <p className="text-slate-300 text-[11px] leading-relaxed">{item.globalComparison}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

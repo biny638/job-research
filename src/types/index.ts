@@ -17,6 +17,7 @@ export interface Job {
   source: string;
   description: string;
   responsibilities: string[];
+  salary?: string;
   isSaved?: boolean;
   // Enhanced verification & status fields
   recruitmentStatus: 'OPEN' | 'EXPIRED' | 'ALWAYS' | 'NEED_VERIFICATION';
@@ -28,9 +29,35 @@ export interface Job {
   urlStatus: 'DIRECT_POSTING' | 'COMPANY_PORTAL' | 'SEARCH_PORTAL';
 }
 
+export interface ExternalApiStatus {
+  provider: string;
+  configured: boolean;
+  status: 'CONNECTED' | 'NOT_CONFIGURED' | 'AUTH_ERROR' | 'FALLBACK_MODE';
+  statusMessage: string;
+  requiredEnv: string;
+  guideUrl: string;
+  callCount?: number;
+}
+
 export interface TechnicalTerm {
   term: string;
   explanation: string;
+}
+
+export interface NewsDetailedSection {
+  topic: string;
+  content: string;
+}
+
+export interface NewsCareerInsight {
+  targetRoles: string[];
+  requiredSkills: string[];
+  preparationTips: string;
+}
+
+export interface NewsIndustryImpact {
+  confirmedFacts: string[];
+  futureProjections: string[];
 }
 
 export interface IndustryNews {
@@ -47,11 +74,18 @@ export interface IndustryNews {
   isOverseas: boolean;
   originalUrl: string;
   industryCategory: string;
-  summaryLines: string[]; // 3-line summary
-  summaryBasis: string; // Explains grounded summary
-  keywords: string[]; // 5 core keywords
-  technicalTerms: TechnicalTerm[]; // Difficult jargon & easy explanation
-  globalComparison?: string; // Domestic vs overseas tech comparison
+  // Core AI Summary (4~6 detailed sentences)
+  comprehensiveSummary: string;
+  summaryLines: string[]; // 3-line quick highlights
+  // 5 Enhanced AI Deep Analysis Modules
+  detailedSections?: NewsDetailedSection[];
+  industryImpact?: NewsIndustryImpact;
+  technicalTerms: TechnicalTerm[];
+  careerInsights?: NewsCareerInsight;
+  // Metadata & flags
+  summaryBasis: string;
+  keywords: string[];
+  globalComparison?: string;
   isSaved?: boolean;
   isRealFeed?: boolean;
 }

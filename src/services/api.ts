@@ -76,12 +76,21 @@ export class ApiService {
     experience?: string;
     companyScale?: string;
     showExpired?: boolean;
+    sortBy?: 'latest' | 'deadline';
   }): Promise<{
     success: boolean;
     jobs: Job[];
     total: number;
     referenceDate?: string;
     searchedCompany?: string;
+    externalApiStatus?: {
+      provider: string;
+      configured: boolean;
+      status: 'CONNECTED' | 'NOT_CONFIGURED' | 'AUTH_ERROR' | 'FALLBACK_MODE';
+      statusMessage: string;
+      requiredEnv: string;
+      guideUrl: string;
+    };
     companyInfo?: {
       name: string;
       scale: string;
@@ -99,6 +108,7 @@ export class ApiService {
       total: number;
       referenceDate?: string;
       searchedCompany?: string;
+      externalApiStatus?: any;
       companyInfo?: any;
       message?: string;
       externalSearchLinks?: any[];
