@@ -1,0 +1,6 @@
+{
+  "name": "ENGINEER JOB - AI 공학 채용 & 산업 분석 플랫폼",
+  "description": "공학 전공자와 취업준비생을 위한 AI 기반 채용 정보 검색, Industry HINT 산업 뉴스 요약, 3단계 기업 분석 대시보드 및 맞춤 직무 추천 플랫폼",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
