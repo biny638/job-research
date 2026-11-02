@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react';
 import { isSupabaseConfigured } from '../lib/supabase';
+import { ApiService } from '../services/api';
 
 interface NavbarProps {
   activeTab: string;
@@ -57,16 +58,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleTestAi = async () => {
-    alert('Gemini AI 연결 상태를 진단합니다...');
+    alert('Gemini AI 및 Serverless API 연결 상태를 실시간 진단합니다...');
     try {
-      const res = await (await fetch('/api/ai/test')).json();
+      const res = await ApiService.testAi();
       if (res.connected) {
-        alert(`[AI 연결 성공!]\n- 모델: ${res.modelUsed}\n- 응답 속도: ${res.latencyMs}ms\n- 상태: ${res.message}\nGemini API가 실시간 정상 작동 중입니다.`);
+        alert(
+          `[AI 엔진 연결 성공!]\n` +
+          `- 모델: ${res.modelUsed || 'Gemini Flash'}\n` +
+          `- 응답 지연: ${res.latencyMs}ms\n` +
+          `- 상태: ${res.message || '정상 작동'}\n\n` +
+          `Vercel Serverless Function 및 Gemini API가 원활하게 작동 중입니다.`
+        );
       } else {
-        alert(`[AI 진단 결과]\n- 상태: 로컬 백업 엔지니어링 모드 가동\n- 메시지: ${res.error || '연결 대기 중'}`);
+        const errorDetail = res.error || 'AI 엔진 연결 대기 중';
+        let guide = '';
+        if (errorDetail.includes('GEMINI_API_KEY') || errorDetail.includes('환경변수')) {
+          guide = '\n\n[조치 가이드]\nVercel 대시보드 -> Project Settings -> Environment Variables에 GEMINI_API_KEY를 등록하고 Redeploy를 진행해주세요.';
+        } else if (errorDetail.includes('404')) {
+          guide = '\n\n[조치 가이드]\nVercel Serverless 함수 경로(/api)를 찾지 못했습니다. vercel.json 배포 여부를 확인해주세요.';
+        }
+        alert(`[AI 진단 결과]\n${errorDetail}${guide}`);
       }
     } catch (e: any) {
-      alert(`[AI 연결 오류] ${e.message}`);
+      alert(`[AI 연결 오류] ${e.message || '네트워크 상태를 확인해주세요.'}`);
     }
   };
 
