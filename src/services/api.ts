@@ -74,11 +74,34 @@ export class ApiService {
     major?: string;
     location?: string;
     experience?: string;
-  }): Promise<{ success: boolean; jobs: Job[]; total: number; error?: string }> {
+    companyScale?: string;
+    showExpired?: boolean;
+  }): Promise<{
+    success: boolean;
+    jobs: Job[];
+    total: number;
+    referenceDate?: string;
+    searchedCompany?: string;
+    companyInfo?: {
+      name: string;
+      scale: string;
+      industry: string;
+      mainProducts?: string;
+      officialCareersUrl: string;
+    } | null;
+    message?: string;
+    externalSearchLinks?: Array<{ name: string; url: string; isOfficial: boolean }>;
+    error?: string;
+  }> {
     const { data, error } = await safeFetchJson<{
       success: boolean;
       jobs: Job[];
       total: number;
+      referenceDate?: string;
+      searchedCompany?: string;
+      companyInfo?: any;
+      message?: string;
+      externalSearchLinks?: any[];
       error?: string;
     }>('/api/jobs/search', {
       method: 'POST',
@@ -97,12 +120,16 @@ export class ApiService {
     success: boolean;
     query: string;
     articles: IndustryNews[];
+    total?: number;
+    isRealFeed?: boolean;
     error?: string;
   }> {
     const { data, error } = await safeFetchJson<{
       success: boolean;
       query: string;
       articles: IndustryNews[];
+      total?: number;
+      isRealFeed?: boolean;
       error?: string;
     }>('/api/news/search', {
       method: 'POST',

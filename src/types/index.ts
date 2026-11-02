@@ -17,6 +17,14 @@ export interface Job {
   description: string;
   responsibilities: string[];
   isSaved?: boolean;
+  // Enhanced verification & status fields
+  recruitmentStatus: 'OPEN' | 'EXPIRED' | 'ALWAYS' | 'NEED_VERIFICATION';
+  companyScale: '대기업' | '대기업 계열사' | '중견기업' | '중소/스타트업' | '공기업/공공기관' | '외국계';
+  isLiveApi: boolean;
+  verifiedDate: string;
+  postedDate?: string;
+  officialCareerUrl?: string;
+  urlStatus: 'DIRECT_POSTING' | 'COMPANY_PORTAL' | 'SEARCH_PORTAL';
 }
 
 export interface TechnicalTerm {
@@ -29,14 +37,20 @@ export interface IndustryNews {
   title: string;
   press: string;
   publishedAt: string;
+  publishedAtExact?: string;
+  timeAgo?: string;
+  isWithin24h?: boolean;
+  isWithin7d?: boolean;
   isOverseas: boolean;
   originalUrl: string;
   industryCategory: string;
   summaryLines: string[]; // 3-line summary
+  summaryBasis: string; // Explains grounded summary
   keywords: string[]; // 5 core keywords
   technicalTerms: TechnicalTerm[]; // Difficult jargon & easy explanation
   globalComparison?: string; // Domestic vs overseas tech comparison
   isSaved?: boolean;
+  isRealFeed?: boolean;
 }
 
 export interface CompetitorItem {
@@ -45,12 +59,28 @@ export interface CompetitorItem {
   keyProducts: string;
   techStrength: string;
   marketEdge: string;
+  selectionRationale?: string; // Rationale for competitor choice (e.g., product overlap)
+}
+
+export interface CompanyAnalysisSource {
+  title: string;
+  publisher: string;
+  url: string;
+  publishedAt: string;
 }
 
 export interface CompanyAnalysis {
   companyName: string;
   analyzedDate: string;
   sourceCredibility: string;
+  dataSufficiency: 'HIGH' | 'MEDIUM' | 'LIMITED';
+  companyIdentity: {
+    scale: string;
+    mainIndustry: string;
+    headquarters: string;
+    foundationYear?: string;
+    officialCareersPortal?: string;
+  };
   step1_competitors: {
     competitors: CompetitorItem[];
     differentiationPoints: string[];
@@ -69,8 +99,19 @@ export interface CompanyAnalysis {
     majorAndProjectLinks: string[];
     coverLetterPoints: string[];
   };
-  officialFacts: string[];
-  aiInferences: string[];
+  officialFacts: Array<{
+    content: string;
+    sourceTitle?: string;
+    sourceUrl?: string;
+    date?: string;
+  }>;
+  aiInferences: Array<{
+    title: string;
+    reasoning: string;
+    candidateImplication: string;
+  }>;
+  sourcesConsulted: CompanyAnalysisSource[];
+  unavailableInformation?: string[];
   isSaved?: boolean;
 }
 

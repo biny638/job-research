@@ -18,7 +18,12 @@ import {
   TrendingUp,
   Cpu,
   RefreshCw,
-  Tag
+  Tag,
+  Clock,
+  CheckCircle2,
+  ShieldCheck,
+  Building2,
+  Filter
 } from 'lucide-react';
 import { IndustryNews } from '../types';
 import { ApiService } from '../services/api';
@@ -36,25 +41,28 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
   onToggleSaveNews,
   onNavigateToCompany,
 }) => {
-  const [query, setQuery] = useState('HBM 반도체 패키징');
+  const [query, setQuery] = useState('현대자동차');
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState<IndustryNews[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [periodFilter, setPeriodFilter] = useState<'ALL' | '24H' | '7D'>('ALL');
 
   // Related news modal or expanded state
   const [relatedLoading, setRelatedLoading] = useState(false);
   const [relatedArticles, setRelatedArticles] = useState<any[]>([]);
   const [activeRelatedKeyword, setActiveRelatedKeyword] = useState<string | null>(null);
 
-  // Quick industry topic presets for engineering students
+  // Quick industry topic & enterprise presets for engineering students
   const presets = [
+    '현대자동차',
+    '서연이화',
+    'SK하이닉스',
     'HBM 반도체 패키징',
-    '전고체 배터리 건식전극',
-    '현대차 SDV 아키텍처',
-    'High-NA EUV 노광장비',
-    '휴머노이드 로봇 액추에이터',
-    'SiC 전력반도체 인버터',
-    '우주발사체 액체엔진'
+    '전고체 배터리',
+    'HL만도',
+    '두산로보틱스',
+    'ASML EUV',
+    '한국항공우주산업 KF-21'
   ];
 
   const handleSearch = async (targetQuery?: string) => {
@@ -93,23 +101,36 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
 
   const isSaved = (newsId: string) => savedNews.some(n => n.id === newsId);
 
+  // Filter articles by publication recency
+  const filteredArticles = articles.filter((art) => {
+    if (periodFilter === '24H') return art.isWithin24h;
+    if (periodFilter === '7D') return art.isWithin7d;
+    return true;
+  });
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
         <div className="relative z-10 w-full space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-xs text-cyan-300 font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Industry HINT — AI 공학 뉴스 요약 및 산업 분석</span>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-xs text-cyan-300 font-semibold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Industry HINT — 실시간 언론사 뉴스 기반 AI 공학 브리핑</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>실제 기사 RSS 연동 (가짜 기사 창작 금지)</span>
+            </div>
           </div>
 
           <div className="max-w-4xl space-y-1.5">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              산업 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">기술과 공학의 시선</span>으로 꿰뚫다
+              기업과 산업의 기술 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">공학의 시선</span>으로 꿰뚫다
             </h1>
             <p className="text-slate-300 text-sm leading-relaxed">
-              단순 일반 기사가 아닌 <strong>국내 핵심 기술 뉴스 2건 + 글로벌 해외 기술 뉴스 1건</strong>을 엄선하여 Gemini 3.8 Flash가
-              3줄 공학 요약, 핵심 키워드 5개, 전공자를 위한 전문용어 해설 및 국내외 기술 비교를 즉시 브리핑합니다.
+              Google News 실시간 피드에서 수집된 <strong>실제 언론사 기사(국내 2건 + 글로벌 1건)</strong>의 제목과 스니펫에 근거하여,
+              Gemini 3.8 Flash가 <strong>3줄 공학 요약, 5대 기술 키워드, 전공 전문용어 해설 및 기술 비교</strong>를 도출합니다.
             </p>
           </div>
 
@@ -122,7 +143,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="산업명 또는 기업명을 입력하세요 (예: 전고체 배터리, ASML, HBM)..."
+                placeholder="기업명(서연이화, 현대차, SK하이닉스) 또는 산업 기술 키워드 검색..."
                 className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
               />
             </div>
@@ -134,20 +155,20 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
               {loading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>AI 분석 중...</span>
+                  <span>실시간 수집 및 AI 분석 중...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>온디맨드 분석</span>
+                  <span>실시간 분석</span>
                 </>
               )}
             </button>
           </div>
 
           {/* Quick Presets */}
-          <div className="pt-2 flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-slate-400 font-medium mr-1">추천 토픽:</span>
+          <div className="pt-1 flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="text-slate-400 font-medium mr-1">추천 기업/기술:</span>
             {presets.map((item) => (
               <button
                 key={item}
@@ -155,7 +176,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                   setQuery(item);
                   handleSearch(item);
                 }}
-                className="px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-750 text-slate-300 hover:text-cyan-300 border border-slate-700 transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-750 text-slate-300 hover:text-cyan-300 border border-slate-700 transition-colors cursor-pointer"
               >
                 {item}
               </button>
@@ -164,38 +185,87 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
         </div>
       </div>
 
-      {/* Operational Principles Notice */}
-      <div className="px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs text-slate-400">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>서버리스 원칙: 정기 크론 수집 없이 사용자의 실시간 검색 요청 시에만 안전하게 온디맨드 실행됩니다.</span>
+      {/* Recency Period Filter Bar */}
+      {articles.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
+          <div className="flex items-center gap-2">
+            <Filter className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-300 font-semibold">발행 시점 필터:</span>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setPeriodFilter('ALL')}
+                className={`px-2.5 py-1 rounded-md transition-colors ${
+                  periodFilter === 'ALL'
+                    ? 'bg-cyan-600 text-white font-bold'
+                    : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                전체 ({articles.length}건)
+              </button>
+              <button
+                onClick={() => setPeriodFilter('24H')}
+                className={`px-2.5 py-1 rounded-md transition-colors ${
+                  periodFilter === '24H'
+                    ? 'bg-emerald-600 text-white font-bold'
+                    : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                최근 24시간 이내
+              </button>
+              <button
+                onClick={() => setPeriodFilter('7D')}
+                className={`px-2.5 py-1 rounded-md transition-colors ${
+                  periodFilter === '7D'
+                    ? 'bg-blue-600 text-white font-bold'
+                    : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                최근 7일 이내
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-slate-400 text-[11px]">
+              분석 대상: <strong>{query}</strong>
+            </span>
+            <button
+              onClick={() => onNavigateToCompany(query)}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-950 text-indigo-300 border border-indigo-700/60 hover:bg-indigo-900 transition-colors cursor-pointer text-xs font-semibold"
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span>'{query}' AI 기업 분석 대시보드로 이동</span>
+            </button>
+          </div>
         </div>
-        <span className="text-slate-500 hidden sm:inline">전문 무단복제 금지 &amp; 공식 원문 링크 지원</span>
-      </div>
+      )}
 
       {/* Loading state */}
       {loading && (
         <div className="py-16 text-center space-y-4">
           <div className="w-12 h-12 rounded-full border-3 border-cyan-500 border-t-transparent animate-spin mx-auto"></div>
           <div className="space-y-1">
-            <p className="text-sm font-bold text-white">최신 산업 데이터 검색 및 Gemini 3.8 Flash 공학 분석 중...</p>
-            <p className="text-xs text-slate-400">3줄 기술 요약, 키워드 추출, 전문용어 해설 및 글로벌 기술 비교를 도출하고 있습니다.</p>
+            <p className="text-sm font-bold text-white">Google News 실시간 피드 수집 및 Gemini 3.8 Flash 공학 분석 중...</p>
+            <p className="text-xs text-slate-400">실제 기사 원문 제목과 스니펫만을 근거로 사실 기반 3줄 요약과 전문용어 해설을 도출합니다.</p>
           </div>
         </div>
       )}
 
-      {/* Results grid */}
-      {!loading && articles.length > 0 && (
+      {/* Results list */}
+      {!loading && filteredArticles.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <span className="text-cyan-400">"{query}"</span> AI 분석 결과 (국내 2건 + 글로벌 1건)
+              <span className="text-cyan-400">"{query}"</span> 최신 뉴스 분석 ({filteredArticles.length}건)
             </h2>
-            <span className="text-xs text-slate-400">분석 시각: 방금 전</span>
+            <span className="text-xs text-slate-400 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-cyan-400" />
+              실시간 언론사 원문 직결
+            </span>
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            {articles.map((item, idx) => {
+            {filteredArticles.map((item, idx) => {
               const saved = isSaved(item.id);
               return (
                 <div
@@ -215,9 +285,27 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                         {item.isOverseas ? '해외 글로벌 기술 뉴스' : '국내 핵심 산업 뉴스'}
                       </span>
 
-                      <span className="text-xs text-slate-300 font-semibold">{item.press}</span>
+                      <span className="text-xs text-slate-200 font-bold">{item.press}</span>
                       <span className="text-slate-600">•</span>
-                      <span className="text-xs text-slate-400">{item.publishedAt}</span>
+                      
+                      {/* Exact Published Date */}
+                      <span className="text-xs text-slate-400 font-medium">
+                        {item.publishedAtExact || item.publishedAt}
+                      </span>
+
+                      {/* Recency Tag */}
+                      {item.isWithin24h ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                          24시간 이내 ({item.timeAgo})
+                        </span>
+                      ) : item.isWithin7d ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-950 text-blue-300 border border-blue-800/40">
+                          7일 이내 ({item.timeAgo})
+                        </span>
+                      ) : item.timeAgo ? (
+                        <span className="text-[11px] text-slate-500">{item.timeAgo}</span>
+                      ) : null}
 
                       {item.industryCategory && (
                         <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-cyan-300 border border-slate-700">
@@ -229,7 +317,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onToggleSaveNews(item)}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                           saved
                             ? 'bg-blue-600/20 text-cyan-300 border-cyan-500/50'
                             : 'bg-slate-800 text-slate-400 hover:text-white border-slate-700'
@@ -243,9 +331,9 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                         href={item.originalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+                        className="flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white shadow transition-colors"
                       >
-                        <span>원문 기사</span>
+                        <span>원문 기사 전문</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     </div>
@@ -256,11 +344,17 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     {item.title}
                   </h3>
 
-                  {/* Gemini AI 3-Line Summary */}
-                  <div className="p-4 rounded-xl bg-slate-950/70 border border-cyan-900/30 space-y-2.5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Gemini 3.8 Flash 핵심 공학 요약 (3줄)</span>
+                  {/* Grounded Summary Box with Disclaimer */}
+                  <div className="p-4 rounded-xl bg-slate-950/70 border border-cyan-900/30 space-y-3">
+                    <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                      <div className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Gemini 3.8 Flash 핵심 공학 요약 (3줄)</span>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-normal normal-case flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        제목·스니펫 근거 기반 요약
+                      </span>
                     </div>
 
                     <ul className="space-y-1.5 text-xs text-slate-200 leading-relaxed list-decimal list-inside">
@@ -276,7 +370,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-slate-400">
-                        핵심 키워드 5개 (클릭 시 관련 기사 이어보기 실행)
+                        핵심 기술 키워드 (클릭 시 실시간 관련 기사 탐색)
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -284,7 +378,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                         <button
                           key={kIdx}
                           onClick={() => handleExploreRelated(kw, item.title)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 border ${
+                          className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 border cursor-pointer ${
                             activeRelatedKeyword === kw
                               ? 'bg-cyan-600 text-white border-cyan-400'
                               : 'bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border-slate-700 hover:border-cyan-500/50'
@@ -302,7 +396,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                     <div className="p-4 rounded-xl bg-slate-850/60 border border-slate-800 space-y-2.5">
                       <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
                         <BookOpen className="w-3.5 h-3.5" />
-                        <span>어려운 전문용어와 쉬운 설명 (전공 면접 대비)</span>
+                        <span>어려운 전문용어와 쉬운 설명 (기술 면접 대비)</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                         {item.technicalTerms.map((termItem, tIdx) => (
@@ -337,6 +431,19 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
         </div>
       )}
 
+      {/* When 0 articles found for the filter */}
+      {!loading && hasSearched && filteredArticles.length === 0 && (
+        <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center text-xs text-slate-400 space-y-2">
+          <p>선택하신 발행 시점 조건에 일치하는 기사가 없습니다.</p>
+          <button
+            onClick={() => setPeriodFilter('ALL')}
+            className="text-cyan-400 font-semibold underline cursor-pointer"
+          >
+            전체 기간 보기로 변경
+          </button>
+        </div>
+      )}
+
       {/* Related Articles Section (관련 기사 이어보기) */}
       {activeRelatedKeyword && (
         <div className="bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 space-y-4 shadow-xl">
@@ -344,7 +451,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-cyan-400" />
               <h3 className="text-sm font-bold text-white">
-                <span className="text-cyan-400">#{activeRelatedKeyword}</span> 관련 기사 이어보기
+                <span className="text-cyan-400">#{activeRelatedKeyword}</span> 실시간 후속 기사 이어보기
               </h3>
             </div>
             {relatedLoading && (
@@ -378,7 +485,7 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold"
                     >
-                      <span>원문 보기</span>
+                      <span>원문 기사 보기</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -395,9 +502,9 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
       {!hasSearched && (
         <div className="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 text-center space-y-3">
           <Cpu className="w-10 h-10 text-cyan-400/80 mx-auto" />
-          <h3 className="text-sm font-bold text-white">관심 산업 또는 기업명을 검색해보세요</h3>
-          <p className="text-xs text-slate-400 max-w-lg mx-auto">
-            HBM 반도체, 전고체 배터리, SDV 전장 제어기, 로봇 액추에이터 등 공학 핵심 키워드를 입력하면 국내 2건, 해외 1건의 엄선된 기술 뉴스를 AI가 정밀 요약해 드립니다.
+          <h3 className="text-sm font-bold text-white">관심 기업명 또는 산업 기술 키워드를 검색해보세요</h3>
+          <p className="text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
+            현대자동차, 서연이화, SK하이닉스, HBM 반도체 패키징 등 공학 전공 분야를 입력하면 Google News RSS를 통해 실제 최근 보도된 기사를 수집하고 Gemini 3.8 Flash가 즉시 기술 요약을 제공합니다.
           </p>
         </div>
       )}
