@@ -105,22 +105,23 @@ ${analysis.step3_jobConnection.coverLetterPoints.join('\n')}`;
     <div className="space-y-6">
       {/* Top Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-indigo-950 p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl space-y-4">
+        <div className="relative z-10 w-full space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/80 border border-indigo-500/30 text-xs text-indigo-300 font-semibold">
             <Cpu className="w-3.5 h-3.5" />
             <span>AI 기업 분석 대시보드 — 3-STEP 심층 리포트</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            공학적 실무 과제와 <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">지원 직무를 정밀 연결</span>하다
-          </h1>
+          <div className="max-w-4xl space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              공학적 실무 과제와 <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">지원 직무를 정밀 연결</span>하다
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              단순 재무제표 요약이 아닙니다. <strong>1) 경쟁사 기술 차별점</strong>, <strong>2) 생산성·수율 및 R&amp;D 핵심 과제</strong>, <strong>3) 지원 직무와 전공 프로젝트 연결 고리</strong>까지 이공계 면접관 관점에서 다각도로 도출합니다.
+            </p>
+          </div>
 
-          <p className="text-slate-300 text-sm leading-relaxed">
-            단순 재무제표 요약이 아닙니다. <strong>1) 경쟁사 기술 차별점</strong>, <strong>2) 생산성·수율 및 R&amp;D 핵심 과제</strong>, <strong>3) 지원 직무와 전공 프로젝트 연결 고리</strong>까지 이공계 면접관 관점에서 다각도로 도출합니다.
-          </p>
-
-          {/* Form */}
-          <div className="pt-2 grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+          {/* Form - Full Width spanning up to right edge */}
+          <div className="pt-2 grid grid-cols-1 sm:grid-cols-12 gap-2.5 w-full">
             <div className="sm:col-span-5">
               <label className="block text-[11px] text-slate-400 font-semibold mb-1">분석 대상 기업명</label>
               <div className="relative">

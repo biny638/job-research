@@ -117,22 +117,23 @@ export const JobSearch: React.FC<JobSearchProps> = ({
       <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-indigo-950 p-6 sm:p-8 border border-slate-800 shadow-xl overflow-hidden">
         <div className="absolute right-0 top-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
 
-        <div className="relative z-10 max-w-3xl space-y-4">
+        <div className="relative z-10 w-full space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-xs text-cyan-300 font-medium">
             <Cpu className="w-3.5 h-3.5" />
             <span>이공계 &amp; 엔지니어링 맞춤형 공고 통합 검색</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            대한민국 주요 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">엔지니어링 R&amp;D 및 생산기술</span> 채용 공고
-          </h1>
+          <div className="max-w-4xl space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              대한민국 주요 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">엔지니어링 R&amp;D 및 생산기술</span> 채용 공고
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              전공, 다루는 엔지니어링 툴(Altium, CATIA, Verilog, C/C++), 거점 연구소/공장별로 실시간 검색하고 원문 링크와 AI 기업 분석으로 바로 연결하세요.
+            </p>
+          </div>
 
-          <p className="text-slate-300 text-sm leading-relaxed">
-            전공, 다루는 엔지니어링 툴(Altium, CATIA, Verilog, C/C++), 거점 연구소/공장별로 실시간 검색하고 원문 링크와 AI 기업 분석으로 바로 연결하세요.
-          </p>
-
-          {/* Search Bar */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-2">
+          {/* Search Bar - Full Width stretching to right edge */}
+          <div className="pt-2 flex flex-col sm:flex-row gap-2 w-full">
             <div className="relative flex-1">
               <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input

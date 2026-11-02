@@ -90,20 +90,21 @@ export const Recommendation: React.FC<RecommendationProps> = ({
     <div className="space-y-6">
       {/* Header Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-cyan-950 p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl space-y-4">
+        <div className="relative z-10 w-full space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-xs text-cyan-300 font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>AI 맞춤 직무 &amp; 기업 추천 엔진</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            내 공학 역량(전공·툴·프로젝트)에 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">가장 적합한 기업과 포지션</span>
-          </h1>
-
-          <p className="text-slate-300 text-sm leading-relaxed">
-            전자·기계·컴퓨터·화공 등 지원자의 전공, 다루는 엔지니어링 툴(MATLAB, Altium, CATIA, Vivado), 캡스톤 프로젝트 경험을 분석하여
-            <strong>대기업·히든챔피언 중견기업·유망 스타트업</strong>까지 다각도로 최적의 커리어 로드맵을 제안합니다.
-          </p>
+          <div className="max-w-4xl space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              내 공학 역량(전공·툴·프로젝트)에 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">가장 적합한 기업과 포지션</span>
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              전자·기계·컴퓨터·화공 등 지원자의 전공, 다루는 엔지니어링 툴(MATLAB, Altium, CATIA, Vivado), 캡스톤 프로젝트 경험을 분석하여
+              <strong>대기업·히든챔피언 중견기업·유망 스타트업</strong>까지 다각도로 최적의 커리어 로드맵을 제안합니다.
+            </p>
+          </div>
         </div>
       </div>
 

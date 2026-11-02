@@ -119,20 +119,21 @@ export const ResumeStudio: React.FC<ResumeStudioProps> = ({
     <div className="space-y-6">
       {/* Top Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-indigo-950 p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl space-y-3">
+        <div className="relative z-10 w-full space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/80 border border-indigo-500/30 text-xs text-indigo-300 font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>이력서 &amp; 자기소개서 스튜디오 — Gemini AI STAR 첨삭</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            공학적 전문성을 살리는 <span className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">기술 자기소개서 &amp; 이력서</span>
-          </h1>
-
-          <p className="text-slate-300 text-sm leading-relaxed">
-            허위 스펙을 지어내지 않고, 지원자가 작성한 프로젝트와 기술 트러블슈팅 경험을 <strong>STAR(Situation-Task-Action-Result)</strong> 프레임워크와 
-            <strong>수치화된 공학적 언어</strong>로 날카롭게 가다듬어 드립니다.
-          </p>
+          <div className="max-w-4xl space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              공학적 전문성을 살리는 <span className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">기술 자기소개서 &amp; 이력서</span>
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              허위 스펙을 지어내지 않고, 지원자가 작성한 프로젝트와 기술 트러블슈팅 경험을 <strong>STAR(Situation-Task-Action-Result)</strong> 프레임워크와 
+              <strong>수치화된 공학적 언어</strong>로 날카롭게 가다듬어 드립니다.
+            </p>
+          </div>
 
           {/* Mode Switch Tabs */}
           <div className="pt-2 flex items-center gap-2">

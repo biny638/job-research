@@ -97,23 +97,24 @@ export const IndustryHint: React.FC<IndustryHintProps> = ({
     <div className="space-y-6">
       {/* Header Banner */}
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl space-y-3">
+        <div className="relative z-10 w-full space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-xs text-cyan-300 font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Industry HINT — AI 공학 뉴스 요약 및 산업 분석</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            산업 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">기술과 공학의 시선</span>으로 꿰뚫다
-          </h1>
+          <div className="max-w-4xl space-y-1.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              산업 동향을 <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">기술과 공학의 시선</span>으로 꿰뚫다
+            </h1>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              단순 일반 기사가 아닌 <strong>국내 핵심 기술 뉴스 2건 + 글로벌 해외 기술 뉴스 1건</strong>을 엄선하여 Gemini 3.8 Flash가
+              3줄 공학 요약, 핵심 키워드 5개, 전공자를 위한 전문용어 해설 및 국내외 기술 비교를 즉시 브리핑합니다.
+            </p>
+          </div>
 
-          <p className="text-slate-300 text-sm leading-relaxed">
-            단순 일반 기사가 아닌 <strong>국내 핵심 기술 뉴스 2건 + 글로벌 해외 기술 뉴스 1건</strong>을 엄선하여 Gemini 3.8 Flash가
-            3줄 공학 요약, 핵심 키워드 5개, 전공자를 위한 전문용어 해설 및 국내외 기술 비교를 즉시 브리핑합니다.
-          </p>
-
-          {/* Search Input */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-2">
+          {/* Search Input - Full Width */}
+          <div className="pt-2 flex flex-col sm:flex-row gap-2 w-full">
             <div className="relative flex-1">
               <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input
