@@ -83,8 +83,6 @@ export class ApiService {
     total: number;
     referenceDate?: string;
     searchedCompany?: string;
-    providerSummaries?: Array<{ name: string; type: string; status: string; count: number; message?: string }>;
-    emptyFeedback?: any;
     externalApiStatus?: {
       provider: string;
       configured: boolean;
@@ -110,8 +108,6 @@ export class ApiService {
       total: number;
       referenceDate?: string;
       searchedCompany?: string;
-      providerSummaries?: any[];
-      emptyFeedback?: any;
       externalApiStatus?: any;
       companyInfo?: any;
       message?: string;

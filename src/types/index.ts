@@ -27,25 +27,6 @@ export interface Job {
   postedDate?: string;
   officialCareerUrl?: string;
   urlStatus: 'DIRECT_POSTING' | 'COMPANY_PORTAL' | 'SEARCH_PORTAL';
-  // New multi-provider collection fields
-  providerType?: 'OFFICIAL_ATS' | 'JSON_LD' | 'VERIFIED_CATALOG' | 'WORK24' | 'SARAMIN_API';
-  lastCheckedAt?: string;
-}
-
-export type SearchEmptyStateReason = 
-  | 'NO_POSTINGS_FOUND'       // 1. 확인된 모집 공고 없음
-  | 'SOURCE_NOT_CONNECTED'    // 2. 해당 기업의 채용 데이터 소스 미연결
-  | 'ACCESS_RESTRICTED'       // 3. 외부 사이트 접근 제한
-  | 'FETCH_FAILED';           // 4. 외부 데이터 조회 실패
-
-export interface SearchEmptyFeedback {
-  reason: SearchEmptyStateReason;
-  reasonLabel: string;
-  companyName?: string;
-  message: string;
-  technicalDetails?: string;
-  officialCareerUrl?: string;
-  links: Array<{ name: string; url: string; isOfficial: boolean }>;
 }
 
 export interface ExternalApiStatus {
