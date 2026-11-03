@@ -13,11 +13,14 @@
 import express, { Request, Response, Router } from 'express';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import { JobAggregatorService } from './providers/aggregator';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+const jobAggregator = new JobAggregatorService();
 
 // Initialize Google GenAI client (Server-Side ONLY)
 const apiKey = process.env.GEMINI_API_KEY || '';
@@ -1670,182 +1673,15 @@ router.post('/jobs/search', async (req: Request, res: Response) => {
       sortBy = 'latest'    // 'latest' (최신순) | 'deadline' (마감 임박순)
     } = req.body;
 
-    const { dateStr: todayKstStr, now: currentKstDate } = getKSTDate();
-    const rawQuery = (query || '').trim();
-    const cleanQuery = normalizeCompanyName(rawQuery).toLowerCase();
+    const { dateStr: todayKstStr } = getKSTDate();
 
-    // 1. Fetch live jobs from 고용24 (구 워크넷) OPEN API if configured
-    let work24Result: Work24FetchResult = {
-      jobs: [],
-      status: 'NOT_CONFIGURED',
-      statusMessage: '고용24 OPEN API 인증키 미등록'
-    };
+    const aggregateResult = await jobAggregator.aggregate(
+      { query, category, major, location, experience, companyScale, showExpired, sortBy },
+      todayKstStr,
+      ENTERPRISE_DIRECTORY
+    );
 
-    if (rawQuery) {
-      work24Result = await fetchWork24Jobs(rawQuery);
-    } else {
-      work24Result = await fetchWork24Jobs('엔지니어');
-    }
-
-    // 2. Check if query matches a known enterprise directory
-    let matchedDirectoryEnterprise: EnterpriseInfo | null = null;
-    for (const [key, info] of Object.entries(ENTERPRISE_DIRECTORY)) {
-      if (
-        cleanQuery === key.toLowerCase() ||
-        info.aliases.some(a => cleanQuery.includes(a.toLowerCase()))
-      ) {
-        matchedDirectoryEnterprise = info;
-        break;
-      }
-    }
-
-    // 3. Combine verified database jobs and live Work24 jobs
-    const combinedSource = [...VERIFIED_ENGINEERING_JOBS, ...work24Result.jobs];
-
-    // Process all jobs in catalog with dynamic date status and internType
-    const allProcessedJobs = combinedSource.map(job => {
-      const status = evaluateRecruitmentStatus(job.deadline, todayKstStr);
-      const detectedIntern = (job as any).internType || detectInternType(job.title, job.experienceLevel);
-      return {
-        ...job,
-        internType: detectedIntern,
-        recruitmentStatus: status,
-        verifiedDate: todayKstStr
-      };
-    });
-
-    // Filtering logic
-    const filtered = allProcessedJobs.filter(job => {
-      const jobCompanyClean = normalizeCompanyName(job.company).toLowerCase();
-
-      // Query match (handles company name, title, tech stack, major, group)
-      let matchQuery = true;
-      if (cleanQuery) {
-        // Group query expansion: e.g. "현대자동차그룹" or "현대차 계열사"
-        const isGroupSearch = cleanQuery.includes('그룹') || cleanQuery.includes('계열사');
-        if (isGroupSearch) {
-          const groupPrefix = cleanQuery.replace('그룹', '').replace('계열사', '').trim();
-          matchQuery = jobCompanyClean.includes(groupPrefix) || (job.companyScale === '대기업 계열사' && jobCompanyClean.includes(groupPrefix));
-        } else {
-          matchQuery = Boolean(
-            job.title.toLowerCase().includes(cleanQuery) ||
-            jobCompanyClean.includes(cleanQuery) ||
-            job.techStack.some((t: string) => t.toLowerCase().includes(cleanQuery)) ||
-            job.majorRequirement.some((m: string) => m.toLowerCase().includes(cleanQuery)) ||
-            (job.description && job.description.toLowerCase().includes(cleanQuery))
-          );
-        }
-      }
-
-      // Recruitment status filter: exclude 'EXPIRED' by default (only OPEN or ALWAYS)
-      const matchStatus = showExpired ? true : (job.recruitmentStatus === 'OPEN' || job.recruitmentStatus === 'ALWAYS');
-
-      // Category / Major / Location / Experience / CompanyScale filters
-      const matchCategory = category === '전체' ||
-        job.title.includes(category) ||
-        job.description.includes(category);
-
-      const matchMajor = major === '전체' ||
-        job.majorRequirement.some((m: string) => m.includes(major) || major.includes(m));
-
-      const matchLocation = location === '전체' ||
-        job.location.includes(location);
-
-      // Recruitment Type filter: 전체 / 신입 / 경력 / 인턴
-      const matchExp = (() => {
-        if (!experience || experience === '전체') return true;
-        if (experience === '인턴') {
-          return job.experienceLevel === '인턴' || job.title.includes('인턴') || (job as any).internType !== undefined;
-        }
-        if (experience === '신입') {
-          return job.experienceLevel.includes('신입') && job.experienceLevel !== '인턴' && !job.title.includes('인턴');
-        }
-        if (experience === '경력') {
-          return job.experienceLevel.includes('경력') && job.experienceLevel !== '인턴' && !job.title.includes('인턴');
-        }
-        return job.experienceLevel.includes(experience);
-      })();
-
-      const matchScale = companyScale === '전체' ||
-        job.companyScale === companyScale;
-
-      return matchQuery && matchStatus && matchCategory && matchMajor && matchLocation && matchExp && matchScale;
-    });
-
-    // 4. Sorting logic: 'latest' (postedDate or verifiedDate desc) vs 'deadline' (deadline asc)
-    filtered.sort((a, b) => {
-      if (sortBy === 'deadline') {
-        const dA = a.deadline || '9999-99-99';
-        const dB = b.deadline || '9999-99-99';
-        return dA.localeCompare(dB);
-      }
-      // Default: 'latest'
-      const pA = a.postedDate || a.verifiedDate || '';
-      const pB = b.postedDate || b.verifiedDate || '';
-      return pB.localeCompare(pA);
-    });
-
-    // External API status metadata object for UI feedback
-    const externalApiStatus = {
-      provider: '고용24 (구 워크넷 OPEN API)',
-      configured: Boolean(process.env.WORK24_API_KEY || process.env.WORKNET_API_KEY),
-      status: work24Result.status,
-      statusMessage: work24Result.statusMessage,
-      requiredEnv: 'WORK24_API_KEY',
-      guideUrl: 'https://www.work24.go.kr/cm/c/a/1110/openApiGuideList.do'
-    };
-
-    // Specific enterprise requested but no active jobs found:
-    // Anti-hallucination rule: DO NOT invent fake jobs.
-    // Return honest 0 result with verified official career portal and external job platform search links.
-    if (filtered.length === 0 && cleanQuery) {
-      const targetName = matchedDirectoryEnterprise ? matchedDirectoryEnterprise.name : rawQuery;
-      const officialUrl = matchedDirectoryEnterprise?.officialCareersUrl || '';
-
-      const saraminSearchUrl = `https://www.saramin.co.kr/zf_user/search?searchword=${encodeURIComponent(targetName + ' 엔지니어')}`;
-      const jobKoreaSearchUrl = `https://www.jobkorea.co.kr/Search/?stext=${encodeURIComponent(targetName + ' 엔지니어')}`;
-      const wantedSearchUrl = `https://www.wanted.co.kr/search?query=${encodeURIComponent(targetName)}`;
-      const worknetSearchUrl = `https://www.work24.go.kr/wk/a/b/1200/retriveEmpSrchList.do?keyword=${encodeURIComponent(targetName)}`;
-
-      return res.status(200).json({
-        success: true,
-        total: 0,
-        jobs: [],
-        referenceDate: todayKstStr,
-        searchedCompany: targetName,
-        externalApiStatus,
-        companyInfo: matchedDirectoryEnterprise ? {
-          name: matchedDirectoryEnterprise.name,
-          scale: matchedDirectoryEnterprise.scale,
-          industry: matchedDirectoryEnterprise.industry,
-          mainProducts: matchedDirectoryEnterprise.mainProducts,
-          officialCareersUrl: matchedDirectoryEnterprise.officialCareersUrl
-        } : null,
-        message: `'${targetName}'의 현재 선택하신 조건에 일치하는 실시간 공고가 없습니다. 허위 공고를 생성하지 않고 공식 채용 포털 및 주요 채용 플랫폼 실시간 검색 링크를 제공합니다.`,
-        externalSearchLinks: [
-          { name: '기업 공식 인재채용 사이트', url: officialUrl || `https://www.google.com/search?q=${encodeURIComponent(targetName + ' 채용 공식')}`, isOfficial: true },
-          { name: '고용24 (워크넷)', url: worknetSearchUrl, isOfficial: true },
-          { name: '사람인 실시간 검색', url: saraminSearchUrl, isOfficial: false },
-          { name: '잡코리아 실시간 검색', url: jobKoreaSearchUrl, isOfficial: false },
-          { name: '원티드(Wanted)', url: wantedSearchUrl, isOfficial: false }
-        ]
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      total: filtered.length,
-      referenceDate: todayKstStr,
-      jobs: filtered,
-      externalApiStatus,
-      searchedCompany: matchedDirectoryEnterprise ? matchedDirectoryEnterprise.name : undefined,
-      companyInfo: matchedDirectoryEnterprise ? {
-        name: matchedDirectoryEnterprise.name,
-        scale: matchedDirectoryEnterprise.scale,
-        industry: matchedDirectoryEnterprise.industry,
-        officialCareersUrl: matchedDirectoryEnterprise.officialCareersUrl
-      } : null
-    });
+    return res.status(200).json(aggregateResult);
   } catch (err: any) {
     console.error('Error in /api/jobs/search:', err);
     return res.status(500).json({ success: false, error: err.message });
